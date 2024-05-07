@@ -21,6 +21,7 @@ aggiungere elementi ad essa, eliminarli ecc.
 - Deve esistere una funzione che ordini gli elementi della lista in ordine alfabetico detta Ordina().
 - Deve esistere una funzione che permetta la ricerca di un elemento all'interno della lista che deve
 gestire caratteri maiuscoli e minuscoli indistintamente per permettere una ricerca facile e intuitiva.
+- tutte le funzioni devono essere void e ricevere come parametro l'array in cui salviamo gli elementi della spesa.
 
 - Inizieremo con una versione semplice che fa uso di vettori e strutture come oggetti ecc.
 - In seguito aggiorneremo mettendo i file.
