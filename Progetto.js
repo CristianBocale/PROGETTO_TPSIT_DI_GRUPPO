@@ -26,3 +26,14 @@ gestire caratteri maiuscoli e minuscoli indistintamente per permettere una ricer
 - Inizieremo con una versione semplice che fa uso di vettori e strutture come oggetti ecc.
 - In seguito aggiorneremo mettendo i file.
 */
+const prompt=require("prompt-sync")();
+
+let listaSpesa = [];
+
+function aggiungiAlimento()
+{
+    let alimento=prompt("Inserire un nuovo alimento:");
+    listaSpesa.push(alimento);
+}
+
+aggiungiAlimento();
