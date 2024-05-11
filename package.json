@@ -1,0 +1,15 @@
+{
+  "name": "progetto_tpsit_di_gruppo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Progetto.js",
+  "scripts": {
+    "jsdoc": "jsdoc -c jsdoc.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jsdoc": "^4.0.3"
+  }
+}
