@@ -23,3 +23,12 @@ gestire caratteri maiuscoli e minuscoli indistintamente per permettere una ricer
 
 - Inizieremo con una versione semplice che fa uso di vettori e strutture come oggetti ecc.
 - In seguito aggiorneremo mettendo i file.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Dopo attente riflessioni di gruppo abbiamo deciso di intraprendere una strada leggermente diversa, il programma infatti si basa sulla struttra dati del
+Map che permette una gestione più precisa della lista della spesa che conterrà i vari prodotti suddivisi in categorie indicate dall'utente e contenente anche una quantità
+che indica il numero di prodotti di quel tipo da acquistare. A seguito del termine e perfezionamento di questa versione basata sulla struttura Map, allora si passerà a fare la versione con i File.
+
+Le modifiche prevedono la creazione di una classe ListaDellaSpesa che contiene un elemento Map appunto chiamato Lista che è dove vengono salvati tutti i prodotti della lista e poi contiene e conterrà tutti i metodi necessari come l'aggiunta,
+la rimozione ecc.
