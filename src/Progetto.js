@@ -2,7 +2,6 @@ const prompt=require("prompt-sync")();
 //Classe Lista che contiene un elemento Lista di tipo MAP e vari metodi tra cui Aggiungi.
 class ListaDellaSpesa{
     Lista=new Map();
-
     /*
     Con il metodo aggiungi è possibile sia aggiungere nuovi elementi appartenenti a categorie
     non ancora presenti, sia aggiungere elementi a categorie già create. 
@@ -12,6 +11,16 @@ class ListaDellaSpesa{
             this.Lista.set(categoria,new Map());
         }
         this.Lista.get(categoria).set(prodotto,quantita);
+    }
+    /*
+    Stampa di tutte le categorie con i rispettivi prodotti
+    */
+    Stampa(){
+        this.Lista.forEach((prodotti,categoria)=>{console.log(categoria);//attraverso il forEach iteriamo per ogni categoria
+            prodotti.forEach((quantita,prodotto)=>{//iteriamo ogni prodotto di quella categoria
+                console.log("- prodotto: "+prodotto+" | quantità: "+quantita)
+            })
+        })
     }
 }
 
