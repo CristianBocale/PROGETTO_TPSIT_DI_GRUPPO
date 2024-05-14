@@ -14,11 +14,13 @@ const prompt=require("prompt-sync")();
 class ListaDellaSpesa{
     Lista=new Map();
     /**
-     * @param {String} prodotto 
-     * @param {String} quantita 
-     * @param {String} categoria 
-     * @description Con il metodo aggiungi è possibile sia aggiungere nuovi elementi appartenenti a categorie
-        non ancora presenti, sia aggiungere elementi a categorie già create. 
+     * @param {String} prodotto - Il nome del prodotto da aggiungere.
+     * @param {String} quantita - La quantità del prodotto da acquistare.
+     * @param {String} categoria - La categoria del prodotto (es. cibo, bevande, ecc.).
+     * @description Questo metodo aggiunge un nuovo elemento alla lista della spesa o aggiorna la quantità se l'elemento esiste già.
+       Se la categoria specificata non esiste già nella lista, crea una nuova categoria e aggiunge il prodotto con la quantità specificata.
+       Se la categoria esiste già, aggiunge semplicemente il prodotto con la quantità specificata a quella categoria.
+       In caso di valori non validi per prodotto, quantità o categoria, il metodo non esegue alcuna operazione.
      */
     Aggiungi(prodotto,quantita,categoria){        
         if(!this.Lista.has(categoria)){
@@ -28,7 +30,10 @@ class ListaDellaSpesa{
     }
   
    /**
-    * @description Stampa di tutte le categorie con i rispettivi prodotti
+    * @function Stampa
+    * @description  Stampa tutti gli elementi presenti nella lista della spesa, ordinati per categoria.
+    * Ogni categoria viene stampata seguita dai rispettivi prodotti con le relative quantità.
+    * Utilizza la funzione forEach() per iterare su ogni categoria e i relativi prodotti.
     */
     Stampa(){
         this.Lista.forEach((prodotti,categoria)=>{console.log(categoria);//attraverso il forEach iteriamo per ogni categoria
@@ -41,7 +46,15 @@ class ListaDellaSpesa{
 
 /**
  * @function main
- * @description Il main presenta un menu dove è possibile scegliere le azioni da eseguire.
+ * @description Questa funzione avvia il programma per la gestione della lista della spesa. 
+   Visualizza un menu interattivo che consente all'utente di:
+   - Aggiungere un elemento alla lista della spesa specificando il prodotto, la quantità e la categoria.
+   - Visualizzare l'intera lista della spesa con i relativi prodotti e quantità per categoria.
+   - Rimuovere un elemento dalla lista della spesa specificando il prodotto o la categoria da eliminare.
+   - Cercare un prodotto specifico nella lista della spesa specificando il nome del prodotto o la categoria.
+   - Uscire dal programma.
+   L'utente può scegliere un'opzione digitando un numero da 1 a 5. 
+   In caso di scelta non valida, viene visualizzato un messaggio di errore.
  */
 function main(){
     const Lista=new ListaDellaSpesa();
