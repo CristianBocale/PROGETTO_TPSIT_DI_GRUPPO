@@ -13,6 +13,7 @@ const prompt=require("prompt-sync")();
  */
 class ListaDellaSpesa{
     Lista=new Map();
+    
     /**
      * @param {String} prodotto - Il nome del prodotto da aggiungere.
      * @param {String} quantita - La quantità del prodotto da acquistare.
