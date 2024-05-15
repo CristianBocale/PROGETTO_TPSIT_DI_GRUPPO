@@ -42,6 +42,39 @@ class ListaDellaSpesa{
             })
         })
     }
+
+    /**
+     * @function Elimina
+     * @param {String} elemento - Il nome dell'elemento (categoria o prodotto) da eliminare.
+     * @description Questo metodo rimuove una categoria o un prodotto dalla lista della spesa.
+     * Ricerca per primo una categoria che ha lo stesso nome di "elemento".
+     * Se trova una categoria col nome indicato la elimina.
+     * Se non c'è nessuna categoria il cui nome corrisponde a "elemento", passa alla ricerca dei prodotti scorrendo tutte le categorie presenti.
+     * Se in una categoria trova un prodotto il cui nome corrisponde a "elemento", lo elimina.
+     * Se la funzione non riesce ad eliminare nessun prodotto/categoria stampa un messaggio di avviso all'utente.
+     */
+    Elimina(elemento){
+        let eliminato=0;
+        if(this.Lista.has(elemento.toUpperCase())){
+            this.Lista.delete(elemento.toUpperCase())
+            console.log("Eliminata la categoria: " + elemento.toUpperCase())
+            eliminato = 1
+        }
+        else{
+            this.Lista.forEach((prodotti,categoria)=>{
+                if(prodotti.has(elemento.toLowerCase()))
+                {
+                    prodotti.delete(elemento.toLowerCase())
+                    console.log("Eliminato il prodotto "+elemento.toLowerCase()+" dalla categoria "+categoria)
+                    eliminato = 1
+                }
+            })
+        }
+
+        if(eliminato == 0){
+            console.log("Impossibile trovare una categoria o un prodotto con il nome specificato")
+        }
+    }
 }
 
 /**

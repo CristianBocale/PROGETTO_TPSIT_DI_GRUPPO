@@ -181,7 +181,7 @@ La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.</p>
     
 
     
-    <h4 class="name" id="main"><span class="type-signature"></span>main<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Elimina"><span class="type-signature"></span>Elimina<span class="signature">(elemento)</span><span class="type-signature"></span></h4>
     
 
     
@@ -189,7 +189,151 @@ La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.</p>
 
 
 <div class="description">
-    <p>Il main presenta un menu dove è possibile scegliere le azioni da eseguire.</p>
+    <p>Questo metodo rimuove una categoria o un prodotto dalla lista della spesa.
+Ricerca per primo una categoria che ha lo stesso nome di &quot;elemento&quot;.
+Se trova una categoria col nome indicato la elimina.
+Se non c'è nessuna categoria il cui nome corrisponde a &quot;elemento&quot;, passa alla ricerca dei prodotti scorrendo tutte le categorie presenti.
+Se in una categoria trova un prodotto il cui nome corrisponde a &quot;elemento&quot;, lo elimina.
+Se la funzione non riesce ad eliminare nessun prodotto/categoria stampa un messaggio di avviso all'utente.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>elemento</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Il nome dell'elemento (categoria o prodotto) da eliminare.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line46">line 46</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="Stampa"><span class="type-signature"></span>Stampa<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Stampa tutti gli elementi presenti nella lista della spesa, ordinati per categoria.
+Ogni categoria viene stampata seguita dai rispettivi prodotti con le relative quantità.
+Utilizza la funzione forEach() per iterare su ogni categoria e i relativi prodotti.</p>
 </div>
 
 
@@ -233,7 +377,268 @@ La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line42">line 42</a>
+        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(config)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>create -- sync function for reading user input from stdin</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>{
+sigint: {Boolean} exit on ^C
+autocomplete: {StringArray} function({String})
+history: {String} a history control object (see <code>prompt-sync-history</code>)
+}</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_prompt-sync_index.js.html">node_modules/prompt-sync/index.js</a>, <a href="node_modules_prompt-sync_index.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>prompt function</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="main"><span class="type-signature"></span>main<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Questa funzione avvia il programma per la gestione della lista della spesa.
+Visualizza un menu interattivo che consente all'utente di:</p>
+<ul>
+<li>Aggiungere un elemento alla lista della spesa specificando il prodotto, la quantità e la categoria.</li>
+<li>Visualizzare l'intera lista della spesa con i relativi prodotti e quantità per categoria.</li>
+<li>Rimuovere un elemento dalla lista della spesa specificando il prodotto o la categoria da eliminare.</li>
+<li>Cercare un prodotto specifico nella lista della spesa specificando il nome del prodotto o la categoria.</li>
+<li>Uscire dal programma.
+L'utente può scegliere un'opzione digitando un numero da 1 a 5.
+In caso di scelta non valida, viene visualizzato un messaggio di errore.</li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -279,13 +684,13 @@ La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ListaDellaSpesa.html">ListaDellaSpesa</a></li></ul><h3>Global</h3><ul><li><a href="global.html#main">main</a></li><li><a href="global.html#prompt">prompt</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ListaDellaSpesa.html">ListaDellaSpesa</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Elimina">Elimina</a></li><li><a href="global.html#Stampa">Stampa</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#prompt">prompt</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue May 14 2024 10:49:53 GMT+0200 (Ora legale dell’Europa centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed May 15 2024 17:18:24 GMT+0200 (Ora legale dell’Europa centrale)
 </footer>
 
 <script> prettyPrint(); </script>
