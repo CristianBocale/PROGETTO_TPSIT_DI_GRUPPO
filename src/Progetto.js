@@ -43,6 +43,30 @@ class ListaDellaSpesa{
             })
         })
     }
+
+    Elimina(elemento){
+        let eliminato=0;
+        if(this.Lista.has(elemento.toUpperCase())){
+            this.Lista.delete(elemento.toUpperCase())
+            console.log("Eliminata la categoria: " + elemento.toUpperCase())
+            eliminato = 1
+        }
+        else{
+            this.Lista.forEach((prodotti,categoria)=>{
+                if(prodotti.has(elemento.toLowerCase()))
+                {
+                    prodotti.delete(elemento.toLowerCase())
+                    console.log("Eliminato il prodotto "+elemento.toLowerCase()+" dalla categoria "+categoria)
+                    eliminato = 1
+                }
+            })
+        }
+
+        if(eliminato == 0){
+            console.log("Impossibile trovare una categoria o un prodotto con il nome specificato")
+        }
+    }
+
 }
 
 /**
