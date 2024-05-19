@@ -32,3 +32,11 @@ che indica il numero di prodotti di quel tipo da acquistare. A seguito del termi
 
 Le modifiche prevedono la creazione di una classe ListaDellaSpesa che contiene un elemento Map appunto chiamato Lista che è dove vengono salvati tutti i prodotti della lista e poi contiene e conterrà tutti i metodi necessari come l'aggiunta,
 la rimozione ecc.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Completata la versione Base del progetto comprendende l'aggiunta, l'eliminazione e la visualizzazione degli elementi di una lista della spesa, possiamo considerare conclusa la creazione della versione base del programma. 
+A questo punto si lavorerà su due fronti, la versione principale verrà constantemetne aggiornata e migliorata in termini di efficienza e grafica e ogni miglioramento verrà segnato nel cambiamento della versione da 1.0.0 che è la base
+e man mano andando verso la 2.0.0
+
+Nel frattempo in un altro branch si lavorerà per la creazione di una versione del programma che utilizzi i file che diventerà la versione principale una volta completata.

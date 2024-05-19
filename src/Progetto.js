@@ -1,11 +1,12 @@
 /**
  * @author Cisternino Matteo, Vigilante Antonio, Bocale Cristian, Tancredi Simone
- * @version 0.8.0
+ * @version 1.0.0
  * @description Il programma deve gestire una lista della spesa in cui ogni elemento ha i seguenti attributi: Categoria,prodotto e quantità.
  * La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.
  */
 
 const prompt=require("prompt-sync")();
+let pausa;
 
 /**
  * @class ListaDellaSpesa
@@ -23,11 +24,14 @@ class ListaDellaSpesa{
        Se la categoria esiste già, aggiunge semplicemente il prodotto con la quantità specificata a quella categoria.
        In caso di valori non validi per prodotto, quantità o categoria, il metodo non esegue alcuna operazione.
      */
-    Aggiungi(prodotto,quantita,categoria){        
+    Aggiungi(prodotto,quantita,categoria){   
+        categoria=categoria.toUpperCase();     
+        prodotto=prodotto.toLowerCase()
         if(!this.Lista.has(categoria)){
             this.Lista.set(categoria,new Map());
         }
         this.Lista.get(categoria).set(prodotto,quantita);
+        console.log("\nProdotto aggiunto alla lista della spesa");
     }
   
    /**
@@ -37,6 +41,10 @@ class ListaDellaSpesa{
     * Utilizza la funzione forEach() per iterare su ogni categoria e i relativi prodotti.
     */
     Stampa(){
+        if(this.Lista.size==0){
+            console.log("La lista della spesa è vuota")
+            return; 
+        }
         this.Lista.forEach((prodotti,categoria)=>{console.log(categoria);//attraverso il forEach iteriamo per ogni categoria
             prodotti.forEach((quantita,prodotto)=>{//iteriamo ogni prodotto di quella categoria
                 console.log("- prodotto: "+prodotto+" | quantità: "+quantita)
@@ -44,7 +52,7 @@ class ListaDellaSpesa{
         })
     }
 
-    /**
+      /**
      * @function Elimina
      * @param {String} elemento - Il nome dell'elemento (categoria o prodotto) da eliminare.
      * @description Questo metodo rimuove una categoria o un prodotto dalla lista della spesa.
@@ -55,27 +63,37 @@ class ListaDellaSpesa{
      * Se la funzione non riesce ad eliminare nessun prodotto/categoria stampa un messaggio di avviso all'utente.
      */
 
+
     Elimina(elemento){
+        if(this.Lista.size==0){
+            console.log("\nLa lista della spesa è vuota")
+            return; 
+        }
         let eliminato=0;
-        if(this.Lista.has(elemento.toUpperCase())){
-            this.Lista.delete(elemento.toUpperCase())
-            console.log("Eliminata la categoria: " + elemento.toUpperCase())
+        elemento=elemento.toUpperCase();
+        if(this.Lista.has(elemento)){
+            this.Lista.delete(elemento)
+            console.log("\nEliminata la categoria: " + elemento)
             eliminato = 1
         }
         else{
+            elemento=elemento.toLowerCase();
             this.Lista.forEach((prodotti,categoria)=>{
-                if(prodotti.has(elemento.toLowerCase()))
+                if(prodotti.has(elemento))
                 {
-                    prodotti.delete(elemento.toLowerCase())
-                    console.log("Eliminato il prodotto "+elemento.toLowerCase()+" dalla categoria "+categoria)
+                    prodotti.delete(elemento)
+                    console.log("\nEliminato il prodotto "+elemento+" dalla categoria "+categoria)
                     eliminato = 1
+                }
+                if(prodotti.size==0){
+                    this.Lista.delete(categoria);
                 }
             })
         }
 
         if(eliminato == 0){
-            console.log("Impossibile trovare una categoria o un prodotto con il nome specificato")
-        }
+            console.log("\nImpossibile trovare una categoria o un prodotto con il nome specificato")
+        }       
     }
 
 }
@@ -87,53 +105,55 @@ class ListaDellaSpesa{
    - Aggiungere un elemento alla lista della spesa specificando il prodotto, la quantità e la categoria.
    - Visualizzare l'intera lista della spesa con i relativi prodotti e quantità per categoria.
    - Rimuovere un elemento dalla lista della spesa specificando il prodotto o la categoria da eliminare.
-   - Cercare un prodotto specifico nella lista della spesa specificando il nome del prodotto o la categoria.
    - Uscire dal programma.
-   L'utente può scegliere un'opzione digitando un numero da 1 a 5. 
+   L'utente può scegliere un'opzione digitando un numero da 1 a 4. 
    In caso di scelta non valida, viene visualizzato un messaggio di errore.
  */
 function main(){
     const Lista=new ListaDellaSpesa();
     let scelta;
     do{
+        console.clear();
         console.log("Scegliere cosa fare (1-5)");
         console.log("1-Aggiungere elemento alla lista della spesa");
         console.log("2-Visualizzare la lista della spesa");
         console.log("3-Rimuovere un elemento dalla lista della spesa");
-        console.log("4-Ricerca nella lista della spesa");
-        console.log("5-Esci");
-        scelta=parseInt(prompt(">> "));
-        switch(scelta){
-            case 1:{
-                let prodotto=prompt("Inserisci prodotto: ").toLowerCase();
+        console.log("4-Esci");
+        scelta=parseInt(prompt(">> "));  
+        console.clear(); 
+        switch(scelta){            
+            case 1:{                
+                console.log("Aggiunta prodotto alla lista della spesa\n");
+                let prodotto=prompt("Inserisci nome prodotto: ");
                 let quantita=prompt("Inserisci quantità da acquistare: ");
-                let categoria=prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ").toUpperCase();
+                let categoria=prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
                 Lista.Aggiungi(prodotto,quantita,categoria);
+                prompt("\nPremi Invio per continuare"); 
                 break;
             }
             case 2:{
+                console.log("Gli elementi presenti nella lista della spesa sono: \n");
                 Lista.Stampa();
+                prompt("\nPremi Invio per continuare");
                 break;
             }
             case 3:{
+                console.log("Elinazione prodotto o categoria dalla lista della spesa\n");
                 let prodotto=prompt("Inserisci prodotto o categoria da eliminare dalla lista: ");
                 Lista.Elimina(prodotto);
+                prompt("\nPremi Invio per continuare");
                 break;
             }
             case 4:{
-                let prodotto=prompt("Inserisci prodotto o categoria di prodotti da cercare nella lista: ");
-                Lista.Cerca(prodotto);
-                break;
-            }
-            case 5:{
                 break;
             }
             default:{
                 console.log("Opzione non valida");
+                prompt("\nPremi Invio per continuare");
                 break;
             }
         }
-    }while(scelta!==5);
+    }while(scelta!==4);
 
 }
 //Richiamo del main
