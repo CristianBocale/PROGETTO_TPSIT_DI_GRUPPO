@@ -1,6 +1,6 @@
 /**
  * @author Cisternino Matteo, Vigilante Antonio, Bocale Cristian, Tancredi Simone
- * @version 1.0.0
+ * @version 1.1.0
  * @description Il programma deve gestire una lista della spesa in cui ogni elemento ha i seguenti attributi: Categoria,prodotto e quantità.
  * La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.
  */
@@ -23,6 +23,7 @@ class ListaDellaSpesa{
        Se la categoria specificata non esiste già nella lista, crea una nuova categoria e aggiunge il prodotto con la quantità specificata.
        Se la categoria esiste già, aggiunge semplicemente il prodotto con la quantità specificata a quella categoria.
        In caso di valori non validi per prodotto, quantità o categoria, il metodo non esegue alcuna operazione.
+       dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordine alfabetico sia per categoria che per prodotto.
      */
     Aggiungi(prodotto,quantita,categoria){   
         categoria=categoria.toUpperCase();     
@@ -31,7 +32,28 @@ class ListaDellaSpesa{
             this.Lista.set(categoria,new Map());
         }
         this.Lista.get(categoria).set(prodotto,quantita);
+
+        this.Lista=new Map([...this.Lista].sort());//Ordiniamo gli elementi della lista tramite sort
+        this.Lista.forEach((prodotti)=>{//iteriamo ogni categoria
+            prodotti=new Map([...prodotti].sort());//ordiniamo tutti gli elementi delle singole categorie
+        })
+
         console.log("\nProdotto aggiunto alla lista della spesa");
+    }
+    /**
+     * @function InterfacciaAggiungi
+     * @description Questo metodo permette all'utente di inserire un nuovo prodotto nella lista della spesa.
+     * In particolare questa classe gestisce tutta la parte grafica dell'aggiunta di un prodotto alla lista della spesa.
+     * L'aggiunta di un prodotto avviene tramite l'inserimento del nome del prodotto, la quantità e la categoria che
+     * vengono poi passati come parametri al metodo Aggiungi della classe ListaDellaSpesa che fa l'effettiva aggiunta.
+     */
+    InterfacciaAggiungi(){
+        console.log("Aggiunta prodotto alla lista della spesa\n");
+        let prodotto=prompt("Inserisci nome prodotto: ");
+        let quantita=prompt("Inserisci quantità da acquistare: ");
+        let categoria=prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
+        Lista.Aggiungi(prodotto,quantita,categoria);
+        prompt("\nPremi Invio per continuare");
     }
   
    /**
@@ -62,8 +84,6 @@ class ListaDellaSpesa{
      * Se in una categoria trova un prodotto il cui nome corrisponde a "elemento", lo elimina.
      * Se la funzione non riesce ad eliminare nessun prodotto/categoria stampa un messaggio di avviso all'utente.
      */
-
-
     Elimina(elemento){
         if(this.Lista.size==0){
             console.log("\nLa lista della spesa è vuota")
@@ -85,7 +105,7 @@ class ListaDellaSpesa{
                     console.log("\nEliminato il prodotto "+elemento+" dalla categoria "+categoria)
                     eliminato = 1
                 }
-                if(prodotti.size==0){
+                if(prodotti.size==0){//se la categoria rimane vuota allora l'elemento all'interno viene eliminato
                     this.Lista.delete(categoria);
                 }
             })
@@ -123,12 +143,7 @@ function main(){
         console.clear(); 
         switch(scelta){            
             case 1:{                
-                console.log("Aggiunta prodotto alla lista della spesa\n");
-                let prodotto=prompt("Inserisci nome prodotto: ");
-                let quantita=prompt("Inserisci quantità da acquistare: ");
-                let categoria=prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
-                Lista.Aggiungi(prodotto,quantita,categoria);
-                prompt("\nPremi Invio per continuare"); 
+                InterfacciaAggiungi(); 
                 break;
             }
             case 2:{
