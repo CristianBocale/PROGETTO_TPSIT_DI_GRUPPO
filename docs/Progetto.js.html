@@ -28,7 +28,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  * @author Cisternino Matteo, Vigilante Antonio, Bocale Cristian, Tancredi Simone
- * @version 1.0.0
+ * @version 1.1.0
  * @description Il programma deve gestire una lista della spesa in cui ogni elemento ha i seguenti attributi: Categoria,prodotto e quantità.
  * La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.
  */
@@ -51,6 +51,7 @@ class ListaDellaSpesa{
        Se la categoria specificata non esiste già nella lista, crea una nuova categoria e aggiunge il prodotto con la quantità specificata.
        Se la categoria esiste già, aggiunge semplicemente il prodotto con la quantità specificata a quella categoria.
        In caso di valori non validi per prodotto, quantità o categoria, il metodo non esegue alcuna operazione.
+       dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordine alfabetico sia per categoria che per prodotto.
      */
     Aggiungi(prodotto,quantita,categoria){   
         categoria=categoria.toUpperCase();     
@@ -59,7 +60,28 @@ class ListaDellaSpesa{
             this.Lista.set(categoria,new Map());
         }
         this.Lista.get(categoria).set(prodotto,quantita);
+
+        this.Lista=new Map([...this.Lista].sort());//Ordiniamo gli elementi della lista tramite sort
+        this.Lista.forEach((prodotti)=>{//iteriamo ogni categoria
+            prodotti=new Map([...prodotti].sort());//ordiniamo tutti gli elementi delle singole categorie
+        })
+
         console.log("\nProdotto aggiunto alla lista della spesa");
+    }
+    /**
+     * @function InterfacciaAggiungi
+     * @description Questo metodo permette all'utente di inserire un nuovo prodotto nella lista della spesa.
+     * In particolare questa classe gestisce tutta la parte grafica dell'aggiunta di un prodotto alla lista della spesa.
+     * L'aggiunta di un prodotto avviene tramite l'inserimento del nome del prodotto, la quantità e la categoria che
+     * vengono poi passati come parametri al metodo Aggiungi della classe ListaDellaSpesa che fa l'effettiva aggiunta.
+     */
+    InterfacciaAggiungi(){
+        console.log("Aggiunta prodotto alla lista della spesa\n");
+        let prodotto=prompt("Inserisci nome prodotto: ");
+        let quantita=prompt("Inserisci quantità da acquistare: ");
+        let categoria=prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
+        Lista.Aggiungi(prodotto,quantita,categoria);
+        prompt("\nPremi Invio per continuare");
     }
   
    /**
@@ -80,16 +102,16 @@ class ListaDellaSpesa{
         })
     }
 
-    /**
-    * @function Elimina
-    * @param {String} elemento - Il nome del prodotto o della categoria da eliminare.
-    * @description  Questa Funzione elimina un elemento specificato dalla lista della spesa. Permette sia l'eliminazione di un'intera
-    * categorai che di un singolo prodotto. Se l'elemento specificato è una categoria, elimina tutti i prodotti associati a quella categoria.
-    * Se l'elemento specificato è un prodotto, elimina solo quel prodotto dalla categoria a cui appartiene. Qualora rimuovendo un prodotto
-    * la categoria rimanesse vuota, elimina anche la categoria. 
-    * Se l'elemento specificato non esiste nella lista della spesa, viene visualizzato un messaggio di errore.
-    * Se l'elemento specificato è presente nella lista della spesa, viene visualizzato un messaggio di conferma dell'eliminazione.
-    */
+      /**
+     * @function Elimina
+     * @param {String} elemento - Il nome dell'elemento (categoria o prodotto) da eliminare.
+     * @description Questo metodo rimuove una categoria o un prodotto dalla lista della spesa.
+     * Ricerca per primo una categoria che ha lo stesso nome di "elemento".
+     * Se trova una categoria col nome indicato la elimina.
+     * Se non c'è nessuna categoria il cui nome corrisponde a "elemento", passa alla ricerca dei prodotti scorrendo tutte le categorie presenti.
+     * Se in una categoria trova un prodotto il cui nome corrisponde a "elemento", lo elimina.
+     * Se la funzione non riesce ad eliminare nessun prodotto/categoria stampa un messaggio di avviso all'utente.
+     */
     Elimina(elemento){
         if(this.Lista.size==0){
             console.log("\nLa lista della spesa è vuota")
@@ -111,7 +133,7 @@ class ListaDellaSpesa{
                     console.log("\nEliminato il prodotto "+elemento+" dalla categoria "+categoria)
                     eliminato = 1
                 }
-                if(prodotti.size==0){
+                if(prodotti.size==0){//se la categoria rimane vuota allora l'elemento all'interno viene eliminato
                     this.Lista.delete(categoria);
                 }
             })
@@ -149,12 +171,7 @@ function main(){
         console.clear(); 
         switch(scelta){            
             case 1:{                
-                console.log("Aggiunta prodotto alla lista della spesa\n");
-                let prodotto=prompt("Inserisci nome prodotto: ");
-                let quantita=prompt("Inserisci quantità da acquistare: ");
-                let categoria=prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
-                Lista.Aggiungi(prodotto,quantita,categoria);
-                prompt("\nPremi Invio per continuare"); 
+                InterfacciaAggiungi(); 
                 break;
             }
             case 2:{
@@ -193,13 +210,13 @@ main();</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ListaDellaSpesa.html">ListaDellaSpesa</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Elimina">Elimina</a></li><li><a href="global.html#Stampa">Stampa</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#prompt">prompt</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ListaDellaSpesa.html">ListaDellaSpesa</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Elimina">Elimina</a></li><li><a href="global.html#InterfacciaAggiungi">InterfacciaAggiungi</a></li><li><a href="global.html#Stampa">Stampa</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#prompt">prompt</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sat May 18 2024 19:43:37 GMT+0200 (Ora legale dell’Europa centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue May 21 2024 12:21:39 GMT+0200 (Ora legale dell’Europa centrale)
 </footer>
 
 <script> prettyPrint(); </script>

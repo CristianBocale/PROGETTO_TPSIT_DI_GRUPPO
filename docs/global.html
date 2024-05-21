@@ -118,7 +118,7 @@ La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.</p>
 
     
     <dt class="tag-version">Version:</dt>
-    <dd class="tag-version"><ul class="dummy"><li>1.0.0</li></ul></dd>
+    <dd class="tag-version"><ul class="dummy"><li>1.1.0</li></ul></dd>
     
 
     
@@ -189,12 +189,12 @@ La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.</p>
 
 
 <div class="description">
-    <p>Questa Funzione elimina un elemento specificato dalla lista della spesa. Permette sia l'eliminazione di un'intera
-categorai che di un singolo prodotto. Se l'elemento specificato è una categoria, elimina tutti i prodotti associati a quella categoria.
-Se l'elemento specificato è un prodotto, elimina solo quel prodotto dalla categoria a cui appartiene. Qualora rimuovendo un prodotto
-la categoria rimanesse vuota, elimina anche la categoria.
-Se l'elemento specificato non esiste nella lista della spesa, viene visualizzato un messaggio di errore.
-Se l'elemento specificato è presente nella lista della spesa, viene visualizzato un messaggio di conferma dell'eliminazione.</p>
+    <p>Questo metodo rimuove una categoria o un prodotto dalla lista della spesa.
+Ricerca per primo una categoria che ha lo stesso nome di &quot;elemento&quot;.
+Se trova una categoria col nome indicato la elimina.
+Se non c'è nessuna categoria il cui nome corrisponde a &quot;elemento&quot;, passa alla ricerca dei prodotti scorrendo tutte le categorie presenti.
+Se in una categoria trova un prodotto il cui nome corrisponde a &quot;elemento&quot;, lo elimina.
+Se la funzione non riesce ad eliminare nessun prodotto/categoria stampa un messaggio di avviso all'utente.</p>
 </div>
 
 
@@ -246,7 +246,7 @@ Se l'elemento specificato è presente nella lista della spesa, viene visualizzat
 
             
 
-            <td class="description last"><p>Il nome del prodotto o della categoria da eliminare.</p></td>
+            <td class="description last"><p>Il nome dell'elemento (categoria o prodotto) da eliminare.</p></td>
         </tr>
 
     
@@ -287,7 +287,98 @@ Se l'elemento specificato è presente nella lista della spesa, viene visualizzat
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line55">line 55</a>
+        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line77">line 77</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="InterfacciaAggiungi"><span class="type-signature"></span>InterfacciaAggiungi<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Questo metodo permette all'utente di inserire un nuovo prodotto nella lista della spesa.
+In particolare questa classe gestisce tutta la parte grafica dell'aggiunta di un prodotto alla lista della spesa.
+L'aggiunta di un prodotto avviene tramite l'inserimento del nome del prodotto, la quantità e la categoria che
+vengono poi passati come parametri al metodo Aggiungi della classe ListaDellaSpesa che fa l'effettiva aggiunta.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -377,7 +468,7 @@ Utilizza la funzione forEach() per iterare su ogni categoria e i relativi prodot
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line37">line 37</a>
+        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -474,7 +565,7 @@ In caso di scelta non valida, viene visualizzato un messaggio di errore.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line99">line 99</a>
+        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line121">line 121</a>
     </li></ul></dd>
     
 
@@ -520,13 +611,13 @@ In caso di scelta non valida, viene visualizzato un messaggio di errore.</li>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ListaDellaSpesa.html">ListaDellaSpesa</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Elimina">Elimina</a></li><li><a href="global.html#Stampa">Stampa</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#prompt">prompt</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ListaDellaSpesa.html">ListaDellaSpesa</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Elimina">Elimina</a></li><li><a href="global.html#InterfacciaAggiungi">InterfacciaAggiungi</a></li><li><a href="global.html#Stampa">Stampa</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#prompt">prompt</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sat May 18 2024 19:43:37 GMT+0200 (Ora legale dell’Europa centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue May 21 2024 12:21:39 GMT+0200 (Ora legale dell’Europa centrale)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -40,6 +40,7 @@ class ListaDellaSpesa{
 
         console.log("\nProdotto aggiunto alla lista della spesa");
     }
+
     /**
      * @function InterfacciaAggiungi
      * @description Questo metodo permette all'utente di inserire un nuovo prodotto nella lista della spesa.
@@ -52,7 +53,7 @@ class ListaDellaSpesa{
         let prodotto=prompt("Inserisci nome prodotto: ");
         let quantita=prompt("Inserisci quantità da acquistare: ");
         let categoria=prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
-        Lista.Aggiungi(prodotto,quantita,categoria);
+        this.Aggiungi(prodotto,quantita,categoria);
         prompt("\nPremi Invio per continuare");
     }
   
@@ -143,7 +144,7 @@ function main(){
         console.clear(); 
         switch(scelta){            
             case 1:{                
-                InterfacciaAggiungi(); 
+                Lista.InterfacciaAggiungi(); 
                 break;
             }
             case 2:{
