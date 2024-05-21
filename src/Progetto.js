@@ -161,7 +161,66 @@ class ListaDellaSpesa{
         }       
     }
 
+    /**
+    * @function Modifica
+    * @description Questo metodo ci permette di modificare un prodotto esistente nella lista:
+    * se il prodotto viene trovato inizia il processo di modifica con un sistema menù altrimenti esce un errore.
+    */
+
+    Modifica() {
+        let scelta;
+        let nuovoProdotto;
+        let nuovaQuantita;
+        let nuovaCategoria;
+
+        console.log("Modifica prodotto nella lista della spesa\n");
+        let prodotto = prompt("Quale prodotto vuoi modificare? >> ");
+
+        if (this.Cerca(prodotto)) {
+            this.Elimina(prodotto);
+            do{
+                console.log("Cosa vuoi modificare del prodotto?\n");
+                console.log("1- Nome Prodotto");
+                console.log("2- Quantita");
+                console.log("3- Categoria");
+                scelta=parseInt(prompt(("Fai una scelta >> ")));
+
+                switch(scelta){
+                    case 1:{
+                        nuovoProdotto=prompt("Inserire il nuovo nome del prodotto >>");
+                        break;
+                    }
+                    case 2:{
+                        nuovoQuantita=prompt("Inserire la nuova Quantita' del prodotto >>");
+                        break;
+                    }
+                    case 3:{
+                        nuovaCategoria=prompt("Inserire la nuova categoria del prodotto >>");
+                        break;
+                    }
+                    case 4:{
+                        break;
+                    }
+                    default:{
+                        console.log("Opzione non valida");
+                        prompt("\nPremi Invio per continuare");
+                        break;
+                    }
+                }
+            }while(scelta != 4);
+            
+            this.Aggiungi(nuovoProdotto,nuovaQuantita,nuovaCategoria);
+            console.log("Elemento modificato con successo!");
+        } else {
+            console.log("Operazione Fallita.");
+        }
+    }
+
 }
+
+
+
+    
 
 /**
  * @function main
@@ -184,7 +243,8 @@ function main(){
         console.log("2-Visualizzare la lista della spesa");
         console.log("3-Rimuovere un elemento dalla lista della spesa");
         console.log("4-Ricerca un elemento nella lista della spesa");
-        console.log("5-Esci");
+        console.log("5-Modifica un elemento nella lista della spesa");
+        console.log("6-Esci");
         scelta=parseInt(prompt(">> "));  
         console.clear(); 
         switch(scelta){            
@@ -210,6 +270,10 @@ function main(){
                 break;
             }
             case 5:{
+                Lista.Modifica();
+                break;
+            }
+            case 6:{
                 break;
             }
             default:{
@@ -218,7 +282,7 @@ function main(){
                 break;
             }
         }
-    }while(scelta!==5);
+    }while(scelta!==6);
 
 }
 //Richiamo del main
