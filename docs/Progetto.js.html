@@ -28,7 +28,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  * @author Cisternino Matteo, Vigilante Antonio, Bocale Cristian, Tancredi Simone
- * @version 1.1.0
+ * @version 1.5.0
  * @description Il programma deve gestire una lista della spesa in cui ogni elemento ha i seguenti attributi: Categoria,prodotto e quantità.
  * La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.
  */
@@ -68,6 +68,7 @@ class ListaDellaSpesa{
 
         console.log("\nProdotto aggiunto alla lista della spesa");
     }
+
     /**
      * @function InterfacciaAggiungi
      * @description Questo metodo permette all'utente di inserire un nuovo prodotto nella lista della spesa.
@@ -80,7 +81,7 @@ class ListaDellaSpesa{
         let prodotto=prompt("Inserisci nome prodotto: ");
         let quantita=prompt("Inserisci quantità da acquistare: ");
         let categoria=prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
-        Lista.Aggiungi(prodotto,quantita,categoria);
+        this.Aggiungi(prodotto,quantita,categoria);
         prompt("\nPremi Invio per continuare");
     }
   
@@ -101,7 +102,51 @@ class ListaDellaSpesa{
             })
         })
     }
+    /**
+     * @function Cerca
+     * @param {String} ElementoDaCercare 
+     * @description - * Cerca un elemento specifico all'interno di una mappa (map) che rappresenta una struttura di dati. 
+     *  L'elemento può essere cercato sia come categoria che come prodotto all'interno di tale struttura.
+     *  Se non è una categoria, cerca l'elemento tra i prodotti di tutte le categorie e se non trova l'elemento  stampa un messaggio di errore
+     *  e restituisce false; Se trova qualcosa invece stampa ciò che trova e restituisce true;
+     */
+    Cerca(ElementoDaCercare){
+        ElementoDaCercare=ElementoDaCercare.toUpperCase();
+        let trovato=false;
+        if(this.Lista.has(ElementoDaCercare)){
+            console.log("\n"+ElementoDaCercare);
+            this.Lista.get(ElementoDaCercare).forEach((quantita,prodotto)=>{
+                console.log("- prodotto: "+prodotto+" | quantità: "+quantita)
+            })
+            trovato=true;           
+        }else{
+            ElementoDaCercare=ElementoDaCercare.toLowerCase();
+            this.Lista.forEach((prodotti,categoria)=>{
+                if(prodotti.has(ElementoDaCercare)){
+                    console.log("\n"+categoria+"\n- prodotto: "+ElementoDaCercare+" | quantità: "+prodotti.get(ElementoDaCercare));
+                    trovato=true;
+            }});
+        }
+        if(!trovato){
+            console.log("Elemento non trovato ne tra le categorie ne come prodotto");
+            return false;
+        }else{
+            return true;
+        }
+    }
 
+    /**
+     * @function InterfacciaCerca
+     * @description la funzione permette all'utente di cercare un prodotto o una categoria all'interno della lista della spesa.
+     * Se trova l'elemento lo stampa a video e restituiesce true, altrimenti stampa un messaggio di errore e restituisce false.
+     */
+    InterfacciaCerca()
+    {
+        console.log("Ricerca prodotto o categoria dalla lista della spesa\n");
+        let prodotto=prompt("Inserisci prodotto o categoria di prodotti da cercare nella lista: ");
+        this.Cerca(prodotto);
+        prompt("\nPremi Invio per continuare");
+    }
       /**
      * @function Elimina
      * @param {String} elemento - Il nome dell'elemento (categoria o prodotto) da eliminare.
@@ -166,12 +211,13 @@ function main(){
         console.log("1-Aggiungere elemento alla lista della spesa");
         console.log("2-Visualizzare la lista della spesa");
         console.log("3-Rimuovere un elemento dalla lista della spesa");
-        console.log("4-Esci");
+        console.log("4-Ricerca un elemento nella lista della spesa");
+        console.log("5-Esci");
         scelta=parseInt(prompt(">> "));  
         console.clear(); 
         switch(scelta){            
             case 1:{                
-                InterfacciaAggiungi(); 
+                Lista.InterfacciaAggiungi(); 
                 break;
             }
             case 2:{
@@ -181,13 +227,17 @@ function main(){
                 break;
             }
             case 3:{
-                console.log("Elinazione prodotto o categoria dalla lista della spesa\n");
+                console.log("Eliminazione prodotto o categoria dalla lista della spesa\n");
                 let prodotto=prompt("Inserisci prodotto o categoria da eliminare dalla lista: ");
                 Lista.Elimina(prodotto);
                 prompt("\nPremi Invio per continuare");
                 break;
             }
             case 4:{
+                Lista.InterfacciaCerca();
+                break;
+            }
+            case 5:{
                 break;
             }
             default:{
@@ -196,7 +246,7 @@ function main(){
                 break;
             }
         }
-    }while(scelta!==4);
+    }while(scelta!==5);
 
 }
 //Richiamo del main
@@ -210,13 +260,13 @@ main();</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ListaDellaSpesa.html">ListaDellaSpesa</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Elimina">Elimina</a></li><li><a href="global.html#InterfacciaAggiungi">InterfacciaAggiungi</a></li><li><a href="global.html#Stampa">Stampa</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#prompt">prompt</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ListaDellaSpesa.html">ListaDellaSpesa</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cerca">Cerca</a></li><li><a href="global.html#Elimina">Elimina</a></li><li><a href="global.html#InterfacciaAggiungi">InterfacciaAggiungi</a></li><li><a href="global.html#InterfacciaCerca">InterfacciaCerca</a></li><li><a href="global.html#Stampa">Stampa</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#prompt">prompt</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue May 21 2024 12:21:39 GMT+0200 (Ora legale dell’Europa centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue May 21 2024 19:34:01 GMT+0200 (Ora legale dell’Europa centrale)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,6 +1,6 @@
 /**
  * @author Cisternino Matteo, Vigilante Antonio, Bocale Cristian, Tancredi Simone
- * @version 1.3.0
+ * @version 1.5.0
  * @description Il programma deve gestire una lista della spesa in cui ogni elemento ha i seguenti attributi: Categoria,prodotto e quantità.
  * La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.
  */
@@ -80,24 +80,44 @@ class ListaDellaSpesa{
      * @description - * Cerca un elemento specifico all'interno di una mappa (map) che rappresenta una struttura di dati. 
      *  L'elemento può essere cercato sia come categoria che come prodotto all'interno di tale struttura.
      *  Se non è una categoria, cerca l'elemento tra i prodotti di tutte le categorie e se non trova l'elemento  stampa un messaggio di errore
-
-
+     *  e restituisce false; Se trova qualcosa invece stampa ciò che trova e restituisce true;
      */
     Cerca(ElementoDaCercare){
+        ElementoDaCercare=ElementoDaCercare.toUpperCase();
         let trovato=false;
-        if(this.Lista.has(ElementoDaCercare.toUpperCase())){
-            StampaCategoria(ElementoDaCercare); 
+        if(this.Lista.has(ElementoDaCercare)){
+            console.log("\n"+ElementoDaCercare);
+            this.Lista.get(ElementoDaCercare).forEach((quantita,prodotto)=>{
+                console.log("- prodotto: "+prodotto+" | quantità: "+quantita)
+            })
             trovato=true;           
         }else{
+            ElementoDaCercare=ElementoDaCercare.toLowerCase();
             this.Lista.forEach((prodotti,categoria)=>{
                 if(prodotti.has(ElementoDaCercare)){
-                    StampaProdotto(categoria,ElementoDaCercare,prodotti);
+                    console.log("\n"+categoria+"\n- prodotto: "+ElementoDaCercare+" | quantità: "+prodotti.get(ElementoDaCercare));
                     trovato=true;
             }});
         }
         if(!trovato){
             console.log("Elemento non trovato ne tra le categorie ne come prodotto");
+            return false;
+        }else{
+            return true;
         }
+    }
+
+    /**
+     * @function InterfacciaCerca
+     * @description la funzione permette all'utente di cercare un prodotto o una categoria all'interno della lista della spesa.
+     * Se trova l'elemento lo stampa a video e restituiesce true, altrimenti stampa un messaggio di errore e restituisce false.
+     */
+    InterfacciaCerca()
+    {
+        console.log("Ricerca prodotto o categoria dalla lista della spesa\n");
+        let prodotto=prompt("Inserisci prodotto o categoria di prodotti da cercare nella lista: ");
+        this.Cerca(prodotto);
+        prompt("\nPremi Invio per continuare");
     }
       /**
      * @function Elimina
@@ -163,7 +183,8 @@ function main(){
         console.log("1-Aggiungere elemento alla lista della spesa");
         console.log("2-Visualizzare la lista della spesa");
         console.log("3-Rimuovere un elemento dalla lista della spesa");
-        console.log("4-Esci");
+        console.log("4-Ricerca un elemento nella lista della spesa");
+        console.log("5-Esci");
         scelta=parseInt(prompt(">> "));  
         console.clear(); 
         switch(scelta){            
@@ -184,11 +205,8 @@ function main(){
                 prompt("\nPremi Invio per continuare");
                 break;
             }
-            case 4:
-                {
-                 console.log("RIcerca prodotto o categoria dalla lista della spesa\n");
-                let prodotto=prompt("Inserisci prodotto o categoria di prodotti da cercare nella lista: ");
-                Lista.Cerca(prodotto);
+            case 4:{
+                Lista.InterfacciaCerca();
                 break;
             }
             case 5:{
@@ -200,7 +218,7 @@ function main(){
                 break;
             }
         }
-    }while(scelta!==4);
+    }while(scelta!==5);
 
 }
 //Richiamo del main
