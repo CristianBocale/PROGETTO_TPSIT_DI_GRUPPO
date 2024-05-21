@@ -1,6 +1,6 @@
 /**
  * @author Cisternino Matteo, Vigilante Antonio, Bocale Cristian, Tancredi Simone
- * @version 1.1.0
+ * @version 1.3.0
  * @description Il programma deve gestire una lista della spesa in cui ogni elemento ha i seguenti attributi: Categoria,prodotto e quantità.
  * La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.
  */
@@ -74,7 +74,31 @@ class ListaDellaSpesa{
             })
         })
     }
+    /**
+     * @function Cerca
+     * @param {String} ElementoDaCercare 
+     * @description - * Cerca un elemento specifico all'interno di una mappa (map) che rappresenta una struttura di dati. 
+     *  L'elemento può essere cercato sia come categoria che come prodotto all'interno di tale struttura.
+     *  Se non è una categoria, cerca l'elemento tra i prodotti di tutte le categorie e se non trova l'elemento  stampa un messaggio di errore
 
+
+     */
+    Cerca(ElementoDaCercare){
+        let trovato=false;
+        if(this.Lista.has(ElementoDaCercare.toUpperCase())){
+            StampaCategoria(ElementoDaCercare); 
+            trovato=true;           
+        }else{
+            this.Lista.forEach((prodotti,categoria)=>{
+                if(prodotti.has(ElementoDaCercare)){
+                    StampaProdotto(categoria,ElementoDaCercare,prodotti);
+                    trovato=true;
+            }});
+        }
+        if(!trovato){
+            console.log("Elemento non trovato ne tra le categorie ne come prodotto");
+        }
+    }
       /**
      * @function Elimina
      * @param {String} elemento - Il nome dell'elemento (categoria o prodotto) da eliminare.
@@ -154,13 +178,20 @@ function main(){
                 break;
             }
             case 3:{
-                console.log("Elinazione prodotto o categoria dalla lista della spesa\n");
+                console.log("Eliminazione prodotto o categoria dalla lista della spesa\n");
                 let prodotto=prompt("Inserisci prodotto o categoria da eliminare dalla lista: ");
                 Lista.Elimina(prodotto);
                 prompt("\nPremi Invio per continuare");
                 break;
             }
-            case 4:{
+            case 4:
+                {
+                 console.log("RIcerca prodotto o categoria dalla lista della spesa\n");
+                let prodotto=prompt("Inserisci prodotto o categoria di prodotti da cercare nella lista: ");
+                Lista.Cerca(prodotto);
+                break;
+            }
+            case 5:{
                 break;
             }
             default:{
