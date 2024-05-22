@@ -127,6 +127,7 @@ class ListaDellaSpesa{
       /**
      * @function Elimina
      * @param {String} elemento - Il nome dell'elemento (categoria o prodotto) da eliminare.
+     * @returns {Boolean} True se ha eliminato un elemento, False se non ha eliminato nulla
      * @description Questo metodo rimuove una categoria o un prodotto dalla lista della spesa.
      * Ricerca per primo una categoria che ha lo stesso nome di "elemento".
      * Se trova una categoria col nome indicato la elimina.
@@ -135,15 +136,10 @@ class ListaDellaSpesa{
      * Se la funzione non riesce ad eliminare nessun prodotto/categoria stampa un messaggio di avviso all'utente.
      */
     Elimina(elemento){
-        if(this.Lista.size==0){
-            console.log("\nLa lista della spesa è vuota")
-            return; 
-        }
         let eliminato=0;
         elemento=elemento.toUpperCase();
         if(this.Lista.has(elemento)){
             this.Lista.delete(elemento)
-            console.log("\nEliminata la categoria: " + elemento)
             eliminato = 1
         }
         else{
@@ -152,31 +148,51 @@ class ListaDellaSpesa{
                 if(prodotti.has(elemento))
                 {
                     prodotti.delete(elemento)
-                    console.log("\nEliminato il prodotto "+elemento+" dalla categoria "+categoria)
                     eliminato = 1
                 }
                 if(prodotti.size==0){//se la categoria rimane vuota allora l'elemento all'interno viene eliminato
                     this.Lista.delete(categoria);
+                    eliminato = 1
                 }
             })
         }
 
-        if(eliminato == 0){
-            console.log("\nImpossibile trovare una categoria o un prodotto con il nome specificato")
+        if(eliminato == 1){
+            return true;
+        }
+        else
+        {
+            return false;
         }       
     }
 
     /**
      * @function InterfacciaElimina
-     * @description Questo metodo mostra l' interfaccia di Eliminazione 
-     * Richiede all' utente di inserire il nome del prodotto o della categoria da eliminare.
+     * @description Questo metodo mostra l' interfaccia di Eliminazione.
+     * La funzione verifica se la lista non e' vuota, in tal caso 
+     * richiede all' utente di inserire il nome del prodotto o della categoria da eliminare.
      */
 
     InterfacciaElimina(){
-        console.log("Eliminazione prodotto o categoria dalla lista della spesa\n");
-        let prodotto=prompt("Inserisci prodotto o categoria da eliminare dalla lista: ");
-        this.Elimina(prodotto);
-        prompt("\nPremi Invio per continuare");
+        if(this.Lista.size==0){
+            console.log("\nLa lista della spesa è vuota")
+            prompt("\nPremi Invio per continuare")
+            return; 
+        }
+        else{
+            console.log("Eliminazione prodotto o categoria dalla lista della spesa\n");
+            let prodotto=prompt("Inserisci prodotto o categoria da eliminare dalla lista: ");
+        
+            let risultato = this.Elimina(prodotto)
+            if(risultato == true){
+                console.log("\nElemento eliminato con successo")
+            }
+            else{
+                console.log("\nImpossibile trovare una categoria o un prodotto con il nome specificato")
+            }
+            prompt("\nPremi Invio per continuare")
+        }
+        
     }
 
     /**
