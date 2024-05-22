@@ -175,20 +175,20 @@ class ListaDellaSpesa{
     Modifica() {
         console.log("Modifica prodotto nella lista della spesa\n");
         let prodotto = prompt("Quale prodotto vuoi modificare? >> ");
-        console.log(prodotto);
-        console.log(prodotto);
+        let ElementoDaCercare= this.Cerca(prodotto);
         let scelta;
-        let nuovoProdotto;
-        let nuovaQuantita;
-        let nuovaCategoria;
-
-        if (this.Cerca(prodotto)) {
-            this.Elimina(prodotto);
+        if (ElementoDaCercare.length === 3) {
+            let [categoria, vecchioProdotto, vecchiaQuantita] = ElementoDaCercare;
+            let nuovoProdotto = vecchioProdotto;
+            let nuovaQuantita = vecchiaQuantita;
+            let nuovaCategoria = categoria;
+            this.Elimina(vecchioProdotto);
             do{
                 console.log("Cosa vuoi modificare del prodotto?\n");
                 console.log("1- Nome Prodotto");
                 console.log("2- Quantita");
                 console.log("3- Categoria");
+                console.log("4- Esci");
                 scelta=parseInt(prompt(("Fai una scelta >> ")));
 
                 switch(scelta){
@@ -197,11 +197,12 @@ class ListaDellaSpesa{
                         break;
                     }
                     case 2:{
-                        nuovoQuantita=prompt("Inserire la nuova Quantita' del prodotto >>");
+                        nuovaQuantita=prompt("Inserire la nuova Quantita' del prodotto >>");
                         break;
                     }
                     case 3:{
                         nuovaCategoria=prompt("Inserire la nuova categoria del prodotto >>");
+                        nuovaCategoria=nuovaCategoria.toUpperCase();
                         break;
                     }
                     case 4:{
