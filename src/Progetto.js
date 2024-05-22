@@ -5,6 +5,8 @@
  * La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.
  */
 
+const { values } = require("lodash");
+
 const prompt=require("prompt-sync")();
 let pausa;
 
@@ -83,27 +85,20 @@ class ListaDellaSpesa{
      *  e restituisce false; Se trova qualcosa invece stampa ciò che trova e restituisce true;
      */
     Cerca(ElementoDaCercare){
+        let vettore;
         ElementoDaCercare=ElementoDaCercare.toUpperCase();
-        let trovato=false;
         if(this.Lista.has(ElementoDaCercare)){
-            console.log("\n"+ElementoDaCercare);
-            this.Lista.get(ElementoDaCercare).forEach((quantita,prodotto)=>{
-                console.log("- prodotto: "+prodotto+" | quantità: "+quantita)
-            })
-            trovato=true;           
+            vettore=new Array(ElementoDaCercare);            
+            return vettore;                    
         }else{
             ElementoDaCercare=ElementoDaCercare.toLowerCase();
+            vettore=new Array();
             this.Lista.forEach((prodotti,categoria)=>{
-                if(prodotti.has(ElementoDaCercare)){
-                    console.log("\n"+categoria+"\n- prodotto: "+ElementoDaCercare+" | quantità: "+prodotti.get(ElementoDaCercare));
-                    trovato=true;
+                if(prodotti.has(ElementoDaCercare)){                    
+                    vettore=new Array(categoria,ElementoDaCercare,prodotti.get(ElementoDaCercare));
+                    return vettore;
             }});
-        }
-        if(!trovato){
-            console.log("Elemento non trovato ne tra le categorie ne come prodotto");
-            return false;
-        }else{
-            return true;
+            return vettore;
         }
     }
 
@@ -116,7 +111,17 @@ class ListaDellaSpesa{
     {
         console.log("Ricerca prodotto o categoria dalla lista della spesa\n");
         let prodotto=prompt("Inserisci prodotto o categoria di prodotti da cercare nella lista: ");
-        this.Cerca(prodotto);
+        let ElementoTrovato=this.Cerca(prodotto);
+        if(ElementoTrovato.length==1){
+            console.log("\n"+ElementoTrovato[0]);
+            this.Lista.get(ElementoTrovato[0]).forEach((quantita,prodotto)=>{
+                console.log("- prodotto: "+prodotto+" | quantità: "+quantita)
+            }) 
+        }else if(ElementoTrovato.length==3){
+            console.log("\n" + ElementoTrovato[0] + "\n- prodotto: " + ElementoTrovato[1] + " | quantità: " + ElementoTrovato[2]);
+        }else{
+            console.log("\nNon è stato trovato nessun elemento");
+        }
         prompt("\nPremi Invio per continuare");
     }
       /**
@@ -168,13 +173,14 @@ class ListaDellaSpesa{
     */
 
     Modifica() {
+        console.log("Modifica prodotto nella lista della spesa\n");
+        let prodotto = prompt("Quale prodotto vuoi modificare? >> ");
+        console.log(prodotto);
+        console.log(prodotto);
         let scelta;
         let nuovoProdotto;
         let nuovaQuantita;
         let nuovaCategoria;
-
-        console.log("Modifica prodotto nella lista della spesa\n");
-        let prodotto = prompt("Quale prodotto vuoi modificare? >> ");
 
         if (this.Cerca(prodotto)) {
             this.Elimina(prodotto);
@@ -217,10 +223,6 @@ class ListaDellaSpesa{
     }
 
 }
-
-
-
-    
 
 /**
  * @function main
