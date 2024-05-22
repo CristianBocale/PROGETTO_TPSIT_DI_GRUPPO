@@ -167,6 +167,19 @@ class ListaDellaSpesa{
     }
 
     /**
+     * @function InterfacciaElimina
+     * @description Questo metodo mostra l' interfaccia di Eliminazione 
+     * Richiede all' utente di inserire il nome del prodotto o della categoria da eliminare.
+     */
+
+    InterfacciaElimina(){
+        console.log("Eliminazione prodotto o categoria dalla lista della spesa\n");
+        let prodotto=prompt("Inserisci prodotto o categoria da eliminare dalla lista: ");
+        this.Elimina(prodotto);
+        prompt("\nPremi Invio per continuare");
+    }
+
+    /**
     * @function Modifica
     * @description Questo metodo ci permette di modificare un prodotto esistente nella lista:
     * se il prodotto viene trovato inizia il processo di modifica con un sistema menù altrimenti esce un errore.
@@ -262,10 +275,7 @@ function main(){
                 break;
             }
             case 3:{
-                console.log("Eliminazione prodotto o categoria dalla lista della spesa\n");
-                let prodotto=prompt("Inserisci prodotto o categoria da eliminare dalla lista: ");
-                Lista.Elimina(prodotto);
-                prompt("\nPremi Invio per continuare");
+                Lista.InterfacciaElimina();
                 break;
             }
             case 4:{
