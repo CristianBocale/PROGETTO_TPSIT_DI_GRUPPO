@@ -1,6 +1,6 @@
 /**
  * @author Cisternino Matteo, Vigilante Antonio, Bocale Cristian, Tancredi Simone
- * @version 1.5.0
+ * @version 1.6.0
  * @description Il programma deve gestire una lista della spesa in cui ogni elemento ha i seguenti attributi: Categoria,prodotto e quantità.
  * La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.
  */
@@ -39,8 +39,7 @@ class ListaDellaSpesa{
         this.Lista.forEach((prodotti)=>{//iteriamo ogni categoria
             prodotti=new Map([...prodotti].sort());//ordiniamo tutti gli elementi delle singole categorie
         })
-
-        console.log("\nProdotto aggiunto alla lista della spesa");
+        return true;
     }
 
     /**
@@ -55,19 +54,23 @@ class ListaDellaSpesa{
         let prodotto=prompt("Inserisci nome prodotto: ");
         let quantita=prompt("Inserisci quantità da acquistare: ");
         let categoria=prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
-        this.Aggiungi(prodotto,quantita,categoria);
+        if(this.Aggiungi(prodotto,quantita,categoria)){
+            console.log("\nProdotto aggiunto alla lista della spesa");
+        }else{
+            console.log("\nErrore nell'aggiunta del prodotto alla lista della spesa");
+        }
         prompt("\nPremi Invio per continuare");
     }
   
    /**
-    * @function Stampa
+    * @function VisualizzaLista
     * @description  Stampa tutti gli elementi presenti nella lista della spesa, ordinati per categoria.
     * Ogni categoria viene stampata seguita dai rispettivi prodotti con le relative quantità.
     * Utilizza la funzione forEach() per iterare su ogni categoria e i relativi prodotti.
     */
-    Stampa(){
+    VisualizzaLista(){
         if(this.Lista.size==0){
-            console.log("La lista della spesa è vuota")
+            console.log("La lista della spesa è vuota");
             return; 
         }
         this.Lista.forEach((prodotti,categoria)=>{console.log(categoria);//attraverso il forEach iteriamo per ogni categoria
@@ -76,13 +79,44 @@ class ListaDellaSpesa{
             })
         })
     }
+    InterfacciaVisualizzaLista(){
+        console.log("Gli elementi presenti nella lista della spesa sono: \n");
+        this.VisualizzaLista();
+        prompt("\nPremi Invio per continuare");
+    }
+
+    /**
+     * @function Stampa
+     * @param {Array} ElementoDaStampare prodotto o categoria da stampare
+     * @description Questo metodo stampa un elemento specifico della lista della spesa.
+     * questo elemento può essere una categoria o un prodotto.
+     * Nel caso di una categoria, stampa tutti i prodotti e le relative quantità di quella categoria.
+     * Nel caso di un prodotto, stampa la categoria, il prodotto e la quantità.
+     */
+    Stampa(ElementoDaStampare){
+        if(ElementoDaStampare.length==1){
+            console.log("\n"+ElementoDaStampare[0]);
+            this.Lista.get(ElementoDaStampare[0]).forEach((quantita,prodotto)=>{
+                console.log("- prodotto: "+prodotto+" | quantità: "+quantita)
+            }) 
+        }else if(ElementoDaStampare.length==3){
+            console.log("\n" + ElementoDaStampare[0] + "\n- prodotto: " + ElementoDaStampare[1] + " | quantità: " + ElementoDaStampare[2]);
+        }else{
+            console.log("\nNon è stato trovato nessun elemento");
+        }
+    }    
+
     /**
      * @function Cerca
      * @param {String} ElementoDaCercare 
      * @description - * Cerca un elemento specifico all'interno di una mappa (map) che rappresenta una struttura di dati. 
      *  L'elemento può essere cercato sia come categoria che come prodotto all'interno di tale struttura.
-     *  Se non è una categoria, cerca l'elemento tra i prodotti di tutte le categorie e se non trova l'elemento  stampa un messaggio di errore
-     *  e restituisce false; Se trova qualcosa invece stampa ciò che trova e restituisce true;
+     *  Se non è una categoria, cerca l'elemento tra i prodotti di tutte le categorie;
+     *  Se trova qualcosa allora restituisce un array con ciò che ha trovato:
+     *  Se trova una categoria restituisce un array contenente la categoria trovata.
+     *  Se trova un prodotto allora restituisce un array di 3 elementi con rispettivamente 
+     *  categoria, nome e quantità del prodotto trovato.
+     *  Se non trova niente invece restituisce un array vuoto.
      */
     Cerca(ElementoDaCercare){
         let vettore;
@@ -101,7 +135,6 @@ class ListaDellaSpesa{
             return vettore;
         }
     }
-
     /**
      * @function InterfacciaCerca
      * @description la funzione permette all'utente di cercare un prodotto o una categoria all'interno della lista della spesa.
@@ -112,18 +145,10 @@ class ListaDellaSpesa{
         console.log("Ricerca prodotto o categoria dalla lista della spesa\n");
         let prodotto=prompt("Inserisci prodotto o categoria di prodotti da cercare nella lista: ");
         let ElementoTrovato=this.Cerca(prodotto);
-        if(ElementoTrovato.length==1){
-            console.log("\n"+ElementoTrovato[0]);
-            this.Lista.get(ElementoTrovato[0]).forEach((quantita,prodotto)=>{
-                console.log("- prodotto: "+prodotto+" | quantità: "+quantita)
-            }) 
-        }else if(ElementoTrovato.length==3){
-            console.log("\n" + ElementoTrovato[0] + "\n- prodotto: " + ElementoTrovato[1] + " | quantità: " + ElementoTrovato[2]);
-        }else{
-            console.log("\nNon è stato trovato nessun elemento");
-        }
+        this.Stampa(ElementoTrovato);
         prompt("\nPremi Invio per continuare");
     }
+    
       /**
      * @function Elimina
      * @param {String} elemento - Il nome dell'elemento (categoria o prodotto) da eliminare.
@@ -165,7 +190,6 @@ class ListaDellaSpesa{
             return false;
         }       
     }
-
     /**
      * @function InterfacciaElimina
      * @description Questo metodo mostra l' interfaccia di Eliminazione.
@@ -195,31 +219,32 @@ class ListaDellaSpesa{
         
     }
 
-    /**
-    * @function Modifica
-    * @description Questo metodo ci permette di modificare un prodotto esistente nella lista:
-    * se il prodotto viene trovato inizia il processo di modifica con un sistema menù altrimenti esce un errore.
-    */
-
-    Modifica() {
+    
+    Modifica(vecchioProdotto,nuovoProdotto,nuovaQuantita,nuovaCategoria){
+        if(this.Elimina(vecchioProdotto)&&this.Aggiungi(nuovoProdotto,nuovaQuantita,nuovaCategoria)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    InterfacciaModifica() {
         console.log("Modifica prodotto nella lista della spesa\n");
-        let prodotto = prompt("Quale prodotto vuoi modificare? >> ");
-        let ElementoDaCercare= this.Cerca(prodotto);
+        let vecchioProdotto = prompt("Quale prodotto vuoi modificare? >> ");
         let scelta;
-        if (ElementoDaCercare.length === 3) {
-            let [categoria, vecchioProdotto, vecchiaQuantita] = ElementoDaCercare;
-            let nuovoProdotto = vecchioProdotto;
-            let nuovaQuantita = vecchiaQuantita;
-            let nuovaCategoria = categoria;
-            this.Elimina(vecchioProdotto);
+        let ElementoDaModificare=this.Cerca(vecchioProdotto);
+        if (ElementoDaModificare.length === 3) {
+            let nuovaCategoria = ElementoDaModificare[0];
+            let nuovoProdotto = ElementoDaModificare[1];
+            let nuovaQuantita = ElementoDaModificare[2];                        
             do{
+                console.clear();
+                console.log("Modifica prodotto nella lista della spesa\n");
                 console.log("Cosa vuoi modificare del prodotto?\n");
                 console.log("1- Nome Prodotto");
                 console.log("2- Quantita");
                 console.log("3- Categoria");
                 console.log("4- Esci");
                 scelta=parseInt(prompt(("Fai una scelta >> ")));
-
                 switch(scelta){
                     case 1:{
                         nuovoProdotto=prompt("Inserire il nuovo nome del prodotto >>");
@@ -238,20 +263,22 @@ class ListaDellaSpesa{
                         break;
                     }
                     default:{
-                        console.log("Opzione non valida");
+                        console.log("\nOpzione non valida");
                         prompt("\nPremi Invio per continuare");
                         break;
                     }
                 }
-            }while(scelta != 4);
-            
-            this.Aggiungi(nuovoProdotto,nuovaQuantita,nuovaCategoria);
-            console.log("Elemento modificato con successo!");
+            }while(scelta != 4);   
+            if(this.Modifica(vecchioProdotto,nuovoProdotto,nuovaQuantita,nuovaCategoria)){
+                console.log("\nModifica Avvenuta con Successo.");
+            }else{
+                console.log("\nModifica Fallita.");
+            }
         } else {
-            console.log("Operazione Fallita.");
+            console.log("\nL'elemento che si vuole modificare non esiste nella lista della spesa.");
         }
+        prompt("\nPremi Invio per continuare");
     }
-
 }
 
 /**
@@ -285,9 +312,7 @@ function main(){
                 break;
             }
             case 2:{
-                console.log("Gli elementi presenti nella lista della spesa sono: \n");
-                Lista.Stampa();
-                prompt("\nPremi Invio per continuare");
+                Lista.InterfacciaVisualizzaLista();
                 break;
             }
             case 3:{
@@ -299,7 +324,7 @@ function main(){
                 break;
             }
             case 5:{
-                Lista.Modifica();
+                Lista.InterfacciaModifica();
                 break;
             }
             case 6:{
