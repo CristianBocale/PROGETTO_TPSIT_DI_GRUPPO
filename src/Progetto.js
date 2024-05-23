@@ -1,72 +1,64 @@
 /**
+/**
  * @author Cisternino Matteo, Vigilante Antonio, Bocale Cristian, Tancredi Simone
  * @version 1.6.0
- * @description Il programma deve gestire una lista della spesa in cui ogni elemento ha i seguenti attributi: Categoria,prodotto e quantità.
+ * @description Il programma deve gestire una lista della spesa in cui ogni elemento ha i seguenti attributi: Categoria, prodotto e quantità.
  * La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.
  */
 
-const { values } = require("lodash");
-
-const prompt=require("prompt-sync")();
-let pausa;
+const prompt = require("prompt-sync")();
 
 /**
  * @class ListaDellaSpesa
- * @description Classe ListaDellaSpesa che contiene un elemento Lista di tipo MAP e i vari metodi della gestione Lista.
+ * @description Classe per gestire la lista della spesa.
  */
-class ListaDellaSpesa{
-    Lista=new Map();
-    
+class ListaDellaSpesa {
+    Lista = new Map();
+
     /**
-     * @param {String} prodotto - Il nome del prodotto da aggiungere.
-     * @param {String} quantita - La quantità del prodotto da acquistare.
-     * @param {String} categoria - La categoria del prodotto (es. cibo, bevande, ecc.).
-     * @description Questo metodo aggiunge un nuovo elemento alla lista della spesa o aggiorna la quantità se l'elemento esiste già.
-       Se la categoria specificata non esiste già nella lista, crea una nuova categoria e aggiunge il prodotto con la quantità specificata.
-       Se la categoria esiste già, aggiunge semplicemente il prodotto con la quantità specificata a quella categoria.
-       In caso di valori non validi per prodotto, quantità o categoria, il metodo non esegue alcuna operazione.
-       dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordine alfabetico sia per categoria che per prodotto.
+     * @description Aggiunge o aggiorna un prodotto nella lista della spesa.
+     * @param {String} prodotto - Nome del prodotto.
+     * @param {String} quantita - Quantità da acquistare.
+     * @param {String} categoria - Categoria del prodotto.
+     * @returns {Boolean} True se l'aggiunta è avvenuta con successo, False altrimenti.
      */
-    
-       aggiungi(prodotto, quantita, categoria) {
-        // Convertiamo subito la quantita in numero
-        quantita = parseFloat(quantita); 
-        
+    Aggiungi(prodotto, quantita, categoria) {
+        quantita = parseFloat(quantita);
+
+        // Validazione input
         if (
-          prodotto == null ||
-          prodotto.trim() === "" ||
-          quantita <= 0 ||
-          isNaN(quantita) // Ora controlliamo se quantita è NaN dopo la conversione
+            !prodotto || 
+            prodotto.trim() === "" || 
+            quantita <= 0 || 
+            isNaN(quantita)
         ) {
-          console.log(
-            "Inserisci un nome di prodotto valido e una quantità maggiore di 0."
-          );
-          return false;
+            console.log("Inserisci un nome di prodotto valido e una quantità maggiore di 0.");
+            return false;
         }
-        
-        if (categoria == null || categoria.trim() === "") {
-          console.log("Inserisci una categoria valida.");
-          return false;
+
+        if (!categoria || categoria.trim() === "") {
+            console.log("Inserisci una categoria valida.");
+            return false;
         }
-        
+
         categoria = categoria.toUpperCase();
         prodotto = prodotto.toLowerCase();
-        
+
+        // Aggiunta/aggiornamento prodotto
         if (!this.Lista.has(categoria)) {
-          this.Lista.set(categoria, new Map());
+            this.Lista.set(categoria, new Map());
         }
-        
         this.Lista.get(categoria).set(prodotto, quantita);
-        
-        // Ordiniamo la lista per categorie e prodotti
+
+        // Ordinamento lista
         this.Lista = new Map([...this.Lista].sort());
         this.Lista.forEach((prodotti) => {
-          prodotti = new Map([...prodotti].sort());
+            prodotti = new Map([...prodotti].sort());
         });
-        
         return true;
-      }
+    }
       
+    
       /**
      * @function InterfacciaAggiungi
      * @description Questo metodo permette all'utente di inserire un nuovo prodotto nella lista della spesa.
@@ -223,7 +215,7 @@ class ListaDellaSpesa{
      * La funzione verifica se la lista non e' vuota, in tal caso 
      * richiede all' utente di inserire il nome del prodotto o della categoria da eliminare.
      */
-
+  
     InterfacciaElimina(){
         if(this.Lista.size==0){
             console.log("\nLa lista della spesa è vuota")
@@ -243,7 +235,7 @@ class ListaDellaSpesa{
             }
             prompt("\nPremi Invio per continuare")
         }
-        
+      
     }
     /** 
     * @function Modifica
@@ -337,8 +329,8 @@ class ListaDellaSpesa{
         }
         prompt("\nPremi Invio per continuare");
       }
-}
 
+    }
 /**
  * @function main
  * @description Questa funzione avvia il programma per la gestione della lista della spesa. 

@@ -49,7 +49,7 @@
 
 
 <div class="description">
-    <p>Classe ListaDellaSpesa che contiene un elemento Lista di tipo MAP e i vari metodi della gestione Lista.</p>
+    <p>Classe per gestire la lista della spesa.</p>
 </div>
 
 
@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line13">line 13</a>
+        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line11">line 11</a>
     </li></ul></dd>
     
 
@@ -149,7 +149,7 @@
     
 
     
-    <h4 class="name" id="aggiungi"><span class="type-signature"></span>aggiungi<span class="signature">(prodotto, quantita, categoria)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Aggiungi"><span class="type-signature"></span>Aggiungi<span class="signature">(prodotto, quantita, categoria)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
     
@@ -157,11 +157,7 @@
 
 
 <div class="description">
-    <p>Questo metodo aggiunge un nuovo elemento alla lista della spesa o aggiorna la quantità se l'elemento esiste già.
-Se la categoria specificata non esiste già nella lista, crea una nuova categoria e aggiunge il prodotto con la quantità specificata.
-Se la categoria esiste già, aggiunge semplicemente il prodotto con la quantità specificata a quella categoria.
-In caso di valori non validi per prodotto, quantità o categoria, il metodo non esegue alcuna operazione.
-dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordine alfabetico sia per categoria che per prodotto.</p>
+    <p>Aggiunge o aggiorna un prodotto nella lista della spesa.</p>
 </div>
 
 
@@ -213,7 +209,7 @@ dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordin
 
             
 
-            <td class="description last"><p>Il nome del prodotto da aggiungere.</p></td>
+            <td class="description last"><p>Nome del prodotto.</p></td>
         </tr>
 
     
@@ -236,7 +232,7 @@ dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordin
 
             
 
-            <td class="description last"><p>La quantità del prodotto da acquistare.</p></td>
+            <td class="description last"><p>Quantità da acquistare.</p></td>
         </tr>
 
     
@@ -259,7 +255,7 @@ dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordin
 
             
 
-            <td class="description last"><p>La categoria del prodotto (es. cibo, bevande, ecc.).</p></td>
+            <td class="description last"><p>Categoria del prodotto.</p></td>
         </tr>
 
     
@@ -300,7 +296,7 @@ dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordin
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line30">line 30</a>
+        <a href="Progetto.js.html">Progetto.js</a>, <a href="Progetto.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -325,6 +321,28 @@ dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordin
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>True se l'aggiunta è avvenuta con successo, False altrimenti.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -346,13 +364,13 @@ dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordin
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ListaDellaSpesa.html">ListaDellaSpesa</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cerca">Cerca</a></li><li><a href="global.html#Elimina">Elimina</a></li><li><a href="global.html#InterfacciaAggiungi">InterfacciaAggiungi</a></li><li><a href="global.html#InterfacciaCerca">InterfacciaCerca</a></li><li><a href="global.html#InterfacciaElimina">InterfacciaElimina</a></li><li><a href="global.html#InterfacciaModifica">InterfacciaModifica</a></li><li><a href="global.html#Modifica">Modifica</a></li><li><a href="global.html#Stampa">Stampa</a></li><li><a href="global.html#VisualizzaLista">VisualizzaLista</a></li><li><a href="global.html#main">main</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ListaDellaSpesa.html">ListaDellaSpesa</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cerca">Cerca</a></li><li><a href="global.html#Elimina">Elimina</a></li><li><a href="global.html#InterfacciaAggiungi">InterfacciaAggiungi</a></li><li><a href="global.html#InterfacciaCerca">InterfacciaCerca</a></li><li><a href="global.html#InterfacciaElimina">InterfacciaElimina</a></li><li><a href="global.html#InterfacciaModifica">InterfacciaModifica</a></li><li><a href="global.html#Modifica">Modifica</a></li><li><a href="global.html#Stampa">Stampa</a></li><li><a href="global.html#VisualizzaLista">VisualizzaLista</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#prompt">prompt</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Thu May 23 2024 19:01:24 GMT+0200 (Ora legale dell’Europa centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Thu May 23 2024 23:13:53 GMT+0200 (Ora legale dell’Europa centrale)
 </footer>
 
 <script> prettyPrint(); </script>
