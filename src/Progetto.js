@@ -27,40 +27,67 @@ class ListaDellaSpesa{
        In caso di valori non validi per prodotto, quantità o categoria, il metodo non esegue alcuna operazione.
        dopo l'aggiunta della categoria e del prodotto, la lista viene ordinata in ordine alfabetico sia per categoria che per prodotto.
      */
-    Aggiungi(prodotto,quantita,categoria){   
-        categoria=categoria.toUpperCase();     
-        prodotto=prodotto.toLowerCase()
-        if(!this.Lista.has(categoria)){
-            this.Lista.set(categoria,new Map());
+    
+       aggiungi(prodotto, quantita, categoria) {
+        // Convertiamo subito la quantita in numero
+        quantita = parseFloat(quantita); 
+        
+        if (
+          prodotto == null ||
+          prodotto.trim() === "" ||
+          quantita <= 0 ||
+          isNaN(quantita) // Ora controlliamo se quantita è NaN dopo la conversione
+        ) {
+          console.log(
+            "Inserisci un nome di prodotto valido e una quantità maggiore di 0."
+          );
+          return false;
         }
-        this.Lista.get(categoria).set(prodotto,quantita);
-
-        this.Lista=new Map([...this.Lista].sort());//Ordiniamo gli elementi della lista tramite sort
-        this.Lista.forEach((prodotti)=>{//iteriamo ogni categoria
-            prodotti=new Map([...prodotti].sort());//ordiniamo tutti gli elementi delle singole categorie
-        })
+        
+        if (categoria == null || categoria.trim() === "") {
+          console.log("Inserisci una categoria valida.");
+          return false;
+        }
+        
+        categoria = categoria.toUpperCase();
+        prodotto = prodotto.toLowerCase();
+        
+        if (!this.Lista.has(categoria)) {
+          this.Lista.set(categoria, new Map());
+        }
+        
+        this.Lista.get(categoria).set(prodotto, quantita);
+        
+        // Ordiniamo la lista per categorie e prodotti
+        this.Lista = new Map([...this.Lista].sort());
+        this.Lista.forEach((prodotti) => {
+          prodotti = new Map([...prodotti].sort());
+        });
+        
         return true;
-    }
-
-    /**
+      }
+      
+      /**
      * @function InterfacciaAggiungi
      * @description Questo metodo permette all'utente di inserire un nuovo prodotto nella lista della spesa.
      * In particolare questa classe gestisce tutta la parte grafica dell'aggiunta di un prodotto alla lista della spesa.
      * L'aggiunta di un prodotto avviene tramite l'inserimento del nome del prodotto, la quantità e la categoria che
      * vengono poi passati come parametri al metodo Aggiungi della classe ListaDellaSpesa che fa l'effettiva aggiunta.
      */
-    InterfacciaAggiungi(){
+
+      
+      InterfacciaAggiungi() {
         console.log("Aggiunta prodotto alla lista della spesa\n");
-        let prodotto=prompt("Inserisci nome prodotto: ");
-        let quantita=prompt("Inserisci quantità da acquistare: ");
-        let categoria=prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
-        if(this.Aggiungi(prodotto,quantita,categoria)){
-            console.log("\nProdotto aggiunto alla lista della spesa");
-        }else{
-            console.log("\nErrore nell'aggiunta del prodotto alla lista della spesa");
+        let prodotto = prompt("Inserisci nome prodotto: ");
+        let quantita = prompt("Inserisci quantità da acquistare: ");
+        let categoria = prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
+        if (this.aggiungi(prodotto, quantita, categoria)) {
+          console.log("\nProdotto aggiunto alla lista della spesa");
+        } else {
+          console.log("\nErrore nell'aggiunta del prodotto alla lista della spesa");
         }
         prompt("\nPremi Invio per continuare");
-    }
+      }
   
    /**
     * @function VisualizzaLista
@@ -218,67 +245,98 @@ class ListaDellaSpesa{
         }
         
     }
+    /** 
+    * @function Modifica
+    * @param {String} vecchioProdotto - Il nome del prodotto esistente da sostituire.
+    * @param {String} nuovoProdotto - Il nome del nuovo prodotto da aggiungere.
+    * @param {Number} nuovaQuantita - La nuova quantità del prodotto.
+    * @param {String} nuovaCategoria - La nuova categoria del prodotto.
+    * @returns {Boolean} True se il prodotto è stato modificato con successo, False altrimenti.
+    * @description Questo metodo modifica un prodotto presente nella lista della spesa. 
+    * Esso elimina il prodotto presente e poi aggiunge un nuovo prodotto con le informazioni specificate.
+    */  
 
-    
-    Modifica(vecchioProdotto,nuovoProdotto,nuovaQuantita,nuovaCategoria){
-        if(this.Elimina(vecchioProdotto)&&this.Aggiungi(nuovoProdotto,nuovaQuantita,nuovaCategoria)){
-            return true;
-        }else{
-            return false;
+    Modifica(vecchioProdotto, nuovoProdotto, nuovaQuantita, nuovaCategoria) {
+        if (this.Elimina(vecchioProdotto)) {
+          return this.aggiungi(nuovoProdotto, nuovaQuantita, nuovaCategoria);
+        } else {
+          return false;
         }
-    }
+      }
+      
+    /**
+    *  @function InterfacciaModifica
+    *  @description Interfaccia per modificare un prodotto nella lista della spesa.
+    * Questo metodo chiede all'utente di inserire il nome del prodotto da modificare e 
+    * poi gli chiede di selezionare cosa modificare (nome, quantità, categoria o uscire).
+
+    * Se l'utente sceglie di modificare il nome, la quantità o la categoria del prodotto,
+    * il metodo chiede all'utente di inserire i nuovi valori e poi li utilizza per modificare il prodotto nella lista della spesa.
+
+    * Se l'utente sceglie di uscire, il metodo termina l'operazione di modifica.
+    *  Se la modifica è avvenuta con successo, il metodo stampa un messaggio di conferma. Altrimenti, stampa un messaggio di errore.
+    */
+
     InterfacciaModifica() {
         console.log("Modifica prodotto nella lista della spesa\n");
         let vecchioProdotto = prompt("Quale prodotto vuoi modificare? >> ");
         let scelta;
-        let ElementoDaModificare=this.Cerca(vecchioProdotto);
+        let ElementoDaModificare = this.Cerca(vecchioProdotto);
         if (ElementoDaModificare.length === 3) {
-            let nuovaCategoria = ElementoDaModificare[0];
-            let nuovoProdotto = ElementoDaModificare[1];
-            let nuovaQuantita = ElementoDaModificare[2];                        
-            do{
-                console.clear();
-                console.log("Modifica prodotto nella lista della spesa\n");
-                console.log("Cosa vuoi modificare del prodotto?\n");
-                console.log("1- Nome Prodotto");
-                console.log("2- Quantita");
-                console.log("3- Categoria");
-                console.log("4- Esci");
-                scelta=parseInt(prompt(("Fai una scelta >> ")));
-                switch(scelta){
-                    case 1:{
-                        nuovoProdotto=prompt("Inserire il nuovo nome del prodotto >>");
-                        break;
-                    }
-                    case 2:{
-                        nuovaQuantita=prompt("Inserire la nuova Quantita' del prodotto >>");
-                        break;
-                    }
-                    case 3:{
-                        nuovaCategoria=prompt("Inserire la nuova categoria del prodotto >>");
-                        nuovaCategoria=nuovaCategoria.toUpperCase();
-                        break;
-                    }
-                    case 4:{
-                        break;
-                    }
-                    default:{
-                        console.log("\nOpzione non valida");
-                        prompt("\nPremi Invio per continuare");
-                        break;
-                    }
-                }
-            }while(scelta != 4);   
-            if(this.Modifica(vecchioProdotto,nuovoProdotto,nuovaQuantita,nuovaCategoria)){
-                console.log("\nModifica Avvenuta con Successo.");
-            }else{
-                console.log("\nModifica Fallita.");
+          let nuovaCategoria = ElementoDaModificare[0];
+          let nuovoProdotto = ElementoDaModificare[1];
+          let nuovaQuantita = ElementoDaModificare[2];
+          let modificato = false; 
+          
+          do {
+            console.clear();
+            console.log("Modifica prodotto nella lista della spesa\n");
+            console.log("Cosa vuoi modificare del prodotto?\n");
+            console.log("1- Nome Prodotto");
+            console.log("2- Quantita");
+            console.log("3- Categoria");
+            console.log("4- Esci");
+            scelta = parseInt(prompt(("Fai una scelta >> ")));
+            switch (scelta) {
+              case 1: {
+                nuovoProdotto = prompt("Inserire il nuovo nome del prodotto >>");
+                modificato = true;
+                break;
+              }
+              case 2: {
+                nuovaQuantita = prompt("Inserire la nuova Quantita' del prodotto >>");
+                modificato = true;
+                break;
+              }
+              case 3: {
+                nuovaCategoria = prompt("Inserire la nuova categoria del prodotto >>");
+                nuovaCategoria = nuovaCategoria.toUpperCase();
+                modificato = true;
+                break;
+              }
+              case 4: {
+                break;
+              }
+              default: {
+                console.log("\nOpzione non valida");
+                prompt("\nPremi Invio per continuare");
+                break;
+              }
             }
+          } while (scelta != 4);
+          
+          if (modificato && this.Modifica(vecchioProdotto, nuovoProdotto, nuovaQuantita, nuovaCategoria)) {
+            console.log("\nModifica Avvenuta con Successo.");
+          } else if (!modificato) {
+            console.log("\nNessuna modifica effettuata.");
+          } else {
+            console.log("\nModifica Fallita.");
+          }
         } else {
-            console.log("\nL'elemento che si vuole modificare non esiste nella lista della spesa.");
+          console.log("\nL'elemento che si vuole modificare non esiste nella lista della spesa.");
         }
         prompt("\nPremi Invio per continuare");
-    }
+      }
 }
 
 /**
