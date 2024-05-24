@@ -22,7 +22,6 @@
     "escape-string-regexp": "^2.0.0",
     "graceful-fs": "^4.2.11",
     "js2xmlparser": "^4.0.2",
-    "jsonfile": "^6.1.0",
     "klaw": "^3.0.0",
     "linkify-it": "^5.0.0",
     "lodash": "^4.17.21",
