@@ -40,3 +40,15 @@ A questo punto si lavorerà su due fronti, la versione principale verrà constan
 e man mano andando verso la 2.0.0
 
 Nel frattempo in un altro branch si lavorerà per la creazione di una versione del programma che utilizzi i file che diventerà la versione principale una volta completata.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Alla fine si è optati per lavorare sul branch principale portando tutti gli aggiornamenti del caso per il funzionamento del programma;
+Aggiornamenti relativi alla funzionalità e all'efficienza.
+Aggiornamenti Delle stampe e della visualizzazione
+Aggiornamenti con gestione del file rendendo possibile salvare effettivamente la lista della spesa e quando viene riavviato il programma grazie al file la lista ha ancora quanto aggiunto precedentemente
+La versione 2.0.0 è quindi ora completa.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Seguiranno in seguito vari piccoli aggiustamenti e eventuali migliorie Grafiche.
