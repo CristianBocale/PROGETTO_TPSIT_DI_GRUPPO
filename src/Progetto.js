@@ -1,13 +1,20 @@
 /**
-/**
  * @author Cisternino Matteo, Vigilante Antonio, Bocale Cristian, Tancredi Simone
- * @version 2.0.0
- * @description Il programma deve gestire una lista della spesa in cui ogni elemento ha i seguenti attributi: Categoria, prodotto e quantità.
- * La lista permette l'aggiunta, l'eliminazione e la stampa degli attributi.
+ * @version 2.1.5
+ * @description Il programma deve gestire una lista della spesa in cui ogni elemento 
+ * ha i seguenti attributi: nome del prodotto, quantità da acquistare e categoria del prodotto.
+ * Il programma deve permettere all'utente di:
+ * - Aggiungere un elemento alla lista della spesa specificando il prodotto, la quantità e la categoria.
+ * - Visualizzare l'intera lista della spesa con i relativi prodotti e quantità per categoria.
+ * - Ricerca un elemento nella lista della spesa specificando il nome del prodotto o della categoria.
+ * - Rimuovere un elemento dalla lista della spesa specificando il prodotto o la categoria da eliminare.
+ * - Modificare un elemento nella lista della spesa specificando il prodotto da modificare e i nuovi valori.
+ * Il programma deve essere implementato utilizzando le seguenti classi:
+ * - GestioneFile: Questa classe gestisce la lettura e la scrittura di un file.
+ * - ListaDellaSpesa: Questa classe gestisce la lista della spesa e fornisce metodi per aggiungere, visualizzare, cercare, eliminare e modificare un elemento.
  */
 
-const prompt = require("prompt-sync")();
-const jsonfile = require('jsonfile');
+const prompt = require('prompt-sync')();
 
 /**
  * @class GestioneFile
@@ -16,16 +23,30 @@ const jsonfile = require('jsonfile');
  * La classe fornisce metodi per leggere i dati dal file e creare una mappa dalla stringa JSON letta.
 */
 class GestioneFile {
+    /**
+     * @constructor
+     * @description Questo costruttore inizializza la classe GestioneFile con il percorso del 
+     * file JSON da leggere e scrivere.
+     * Inoltre inizializza il modulo fs per la lettura e la scrittura di file.
+     * @param {String} percorso - Il percorso del file JSON da leggere e scrivere.
+     */
     constructor(percorso) {
         this.fs = require('fs');
         this.percorsoFile = percorso;
     }
 
-    objectToMap(oggetto) {
+    /**
+     * @description Questo metodo converte un oggetto in una mappa ricorsivamente.
+     * Se l'oggetto è vuoto, restituisce una mappa vuota altrimenti crea una mappa con le chiavi 
+     * e i valori dell'oggetto e la restituisce.
+     * @param {Object} oggetto - L'oggetto da convertire in mappa.
+     * @returns {Map} La mappa creata dall'oggetto.
+     */
+    ObjectToMap(oggetto) {
         const mappa = new Map();
         for (const [chiave, valore] of Object.entries(oggetto)) {
             if (valore!==null && typeof valore === 'object' && !(valore instanceof Array)) {
-                mappa.set(chiave, this.objectToMap(valore)); // Ricorsione per oggetti annidati
+                mappa.set(chiave, this.ObjectToMap(valore)); // Ricorsione per oggetti annidati
             } else {
                 mappa.set(chiave, valore);
             }
@@ -33,11 +54,18 @@ class GestioneFile {
         return mappa;
     }
 
-    mapToObject(mappa){
+    /**
+     * @description Questo metodo converte una mappa in un oggetto ricorsivamente.
+     * Se la mappa è vuota, restituisce un oggetto vuoto altrimenti crea un oggetto con le chiavi
+     * e i valori della mappa e lo restituisce.
+     * @param {Map} mappa - La mappa da convertire in oggetto.
+     * @returns {Object} L'oggetto creato dalla mappa.
+     */
+    MapToObject(mappa){
         const oggetto = {};
         for (const [chiave, valore] of mappa) {
             if (valore instanceof Map) {
-                oggetto[chiave] = this.mapToObject(valore); // Ricorsione per sotto-mappe
+                oggetto[chiave] = this.MapToObject(valore); // Ricorsione per sotto-mappe
             } else {
                 oggetto[chiave] = valore;
             }
@@ -45,18 +73,29 @@ class GestioneFile {
         return oggetto;
     }
 
+    /**
+     * @description Questo metodo legge un file JSON e crea e restituisce una mappa dai dati letti.
+     * Se il file non esiste o è vuoto, restituisce una mappa vuota.
+     * @returns {Map} La mappa creata dal file JSON letto.
+     */
     LeggiFileECreaMap() {
         try {
-            const oggetto=this.fs.readFileSync(this.percorsoFile , 'utf8');
-            return this.objectToMap(JSON.parse(oggetto));
+            const datiLettiDalFile=this.fs.readFileSync(this.percorsoFile , 'utf8');//lettura del file
+            //creazione della mappa dalla stringa JSON letta e trasformata in oggetto con JSON.parse
+            return this.ObjectToMap(JSON.parse(datiLettiDalFile));
         } catch (error) {
             return new Map();
         }
     }
 
-    ScriviMapSuFile(mappa) {
-        const oggetto = this.mapToObject(mappa);
-        this.fs.writeFileSync(this.percorsoFile, JSON.stringify(oggetto, null, 2));
+    /**
+     * @description Questo metodo scrive una mappa su un file JSON.
+     * @param {Map} mappa - La mappa da scrivere su file. 
+     */
+    ScriviMapSuFile(listaDaScrivere) {
+        // Trasformazione della mappa in oggetto e scrittura su file sotto forma di stringa JSON
+        const ListaTraformata = this.MapToObject(listaDaScrivere);
+        this.fs.writeFileSync(this.percorsoFile, JSON.stringify(ListaTraformata, null, 2));
     }
 }
 
@@ -65,10 +104,12 @@ class GestioneFile {
 /**
  * @class ListaDellaSpesa
  * @description Classe per gestire la lista della spesa.
+ * La classe fornisce metodi per aggiungere, visualizzare, cercare, eliminare e modificare un elemento.
+ * Oltre a questo, la classe fornisce metodi per gestire l'interfaccia utente di ogni metodo
  */
 class ListaDellaSpesa{    
-    GestioneFile = new GestioneFile('../ListaDellaSpesa.json');
-    Lista = this.GestioneFile.LeggiFileECreaMap();
+    gestioneFile = new GestioneFile('../ListaDellaSpesa.json');
+    lista = this.gestioneFile.LeggiFileECreaMap();
 
     /**
      * @description Aggiunge o aggiorna un prodotto nella lista della spesa.
@@ -79,7 +120,7 @@ class ListaDellaSpesa{
      * @param {String} categoria - Categoria del prodotto.
      * @returns {Boolean} True se l'aggiunta è avvenuta con successo, False altrimenti.
      */
-    Aggiungi(prodotto, quantita, categoria) {
+    Aggiungi(categoria, prodotto, quantita) {
         quantita = parseFloat(quantita);
 
         // Validazione input
@@ -89,7 +130,8 @@ class ListaDellaSpesa{
             quantita <= 0 || 
             isNaN(quantita)  ||
             !categoria ||
-            categoria.trim() === ""
+            categoria.trim() === "" ||
+            prodotto.trim() === categoria.trim()
         ) {
             return false;
         }
@@ -98,111 +140,122 @@ class ListaDellaSpesa{
         prodotto = prodotto.toLowerCase();
 
         // Aggiunta/aggiornamento prodotto
-        if (!this.Lista.has(categoria)) {
-            this.Lista.set(categoria, new Map());
+        if (!this.lista.has(categoria)) {
+            this.lista.set(categoria, new Map());
         }
-        this.Lista.get(categoria).set(prodotto, quantita);
+        this.lista.get(categoria).set(prodotto, quantita);
 
         // Ordinamento lista
-        this.Lista = new Map([...this.Lista].sort());
-        this.Lista.forEach((prodotti) => {
+        this.lista = new Map([...this.lista].sort());
+        this.lista.forEach((prodotti) => {
             prodotti = new Map([...prodotti].sort());
         });
         return true;
     }
-      
-    
     /**
      * @description Questo metodo permette all'utente di inserire un nuovo prodotto nella lista della spesa.
      * In particolare questa classe gestisce tutta la parte grafica dell'aggiunta di un prodotto alla lista della spesa.
      * L'aggiunta di un prodotto avviene tramite l'inserimento del nome del prodotto, la quantità e la categoria che
      * vengono poi passati come parametri al metodo Aggiungi della classe ListaDellaSpesa che fa l'effettiva aggiunta.
+     * qualora durante l'input l'utente inserisca 0, la funzione termina.
     */      
     InterfacciaAggiungi() {
-        console.log("Aggiunta prodotto alla lista della spesa\n");
-        let prodotto = prompt("Inserisci nome prodotto: ");
-        let quantita = prompt("Inserisci quantità da acquistare: ");
-        let categoria = prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc): ");
-        if (this.Aggiungi(prodotto, quantita, categoria)) {
+        console.log("------------------------------------");
+        console.log("              Aggiunta              ");
+        console.log("------------------------------------\n");
+        let categoria = prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc) oppure immetti 0 per annullare >>");
+        if(categoria === "0"){//se l'utente inserisce 0 allora la funzione termina
+            return;
+        }
+        let prodotto = prompt("Inserisci nome prodotto oppure immetti 0 per annullare >> ");
+        if(prodotto === "0"){//se l'utente inserisce 0 allora la funzione termina
+            return;
+        }
+        let quantita = prompt("Inserisci quantità da acquistare oppure immetti 0 per annullare >>");
+        if(quantita === "0"){//se l'utente inserisce 0 allora la funzione termina
+            return;
+        }        
+        //aggiunta del prodotto alla lista della spesa e controllo con output a video per confermare l'aggiunta
+        if (this.Aggiungi(categoria, prodotto, quantita)) {
           console.log("\nProdotto aggiunto alla lista della spesa");
-          this.GestioneFile.ScriviMapSuFile(this.Lista);
+          this.gestioneFile.ScriviMapSuFile(this.lista);
         } else {
           console.log("\nErrore nell'aggiunta del prodotto alla lista della spesa:\
-          \nnome prodotto, quantità e categoria sono obbligatori e la quantità deve essere un numero maggiore di zero");
+          \nnome prodotto e categoria devono essere validi e diversi tra loro, la quantità deve essere maggiore di 0");
         }
         prompt("\nPremi Invio per continuare");
     }
   
+
    /**
     * @description  Stampa tutti gli elementi presenti nella lista della spesa, ordinati per categoria.
     * Ogni categoria viene stampata seguita dai rispettivi prodotti con le relative quantità.
-    * Utilizza la funzione forEach() per iterare su ogni categoria e i relativi prodotti.
+    * Qualora la lista della spesa sia vuota, viene stampato un messaggio di avviso.
     */
     VisualizzaLista(){
-        if(this.Lista.size==0){
-            console.log("La lista della spesa è vuota");
+        if(this.lista.size==0){
+            console.log("!! La lista è vuota !!");
             return; 
         }
-        this.Lista.forEach((prodotti,categoria)=>{console.log(categoria);//attraverso il forEach iteriamo per ogni categoria
+        this.lista.forEach((prodotti,categoria)=>{console.log(categoria);//attraverso il forEach iteriamo per ogni categoria
             prodotti.forEach((quantita,prodotto)=>{//iteriamo ogni prodotto di quella categoria
                 console.log("- prodotto: "+prodotto+" | quantità: "+quantita)
             })
         })
     }
-
     /**
-     * @description Questo metodo mostra l'interfaccia per visualizzare la lista della spesa.
-     * La funzione stampa tutti gli elementi presenti nella lista della spesa, ordinati per categoria.
+     * @description Questo metodo gestisce l'interfaccia per visualizzare la lista della spesa.
+     * viene poi richiamata la funzione VisualizzaLista che stampa tutti gli elementi presenti nella lista della spesa.
      */
     InterfacciaVisualizzaLista(){
-        console.log("Gli elementi presenti nella lista della spesa sono: \n");
+        console.log("------------------------------------");
+        console.log("        Elementi della lista        ");
+        console.log("------------------------------------\n");
         this.VisualizzaLista();
         prompt("\nPremi Invio per continuare");
     }
 
-    /**
-     * @param {Array} ElementoDaStampare prodotto o categoria da stampare
+
+    /**     * 
      * @description Questo metodo stampa un elemento specifico della lista della spesa.
      * questo elemento può essere una categoria o un prodotto.
      * Nel caso di una categoria, stampa tutti i prodotti e le relative quantità di quella categoria.
      * Nel caso di un prodotto, stampa la categoria, il prodotto e la quantità.
+     * @param {Array} elementoDaStampare prodotto o categoria da stampare
      */
-    Stampa(ElementoDaStampare){
-        if(ElementoDaStampare.length==1){
-            console.log("\n"+ElementoDaStampare[0]);
-            this.Lista.get(ElementoDaStampare[0]).forEach((quantita,prodotto)=>{
+    Stampa(elementoDaStampare){
+        if(elementoDaStampare.length==1){
+            console.log("\n"+elementoDaStampare[0]);
+            this.lista.get(elementoDaStampare[0]).forEach((quantita,prodotto)=>{
                 console.log("- prodotto: "+prodotto+" | quantità: "+quantita)
             }) 
-        }else if(ElementoDaStampare.length==3){
-            console.log("\n" + ElementoDaStampare[0] + "\n- prodotto: " + ElementoDaStampare[1] + " | quantità: " + ElementoDaStampare[2]);
+        }else if(elementoDaStampare.length==3){
+            console.log("\n" + elementoDaStampare[0] + "\n- prodotto: " + elementoDaStampare[1] + " | quantità: " + elementoDaStampare[2]);
         }else{
-            console.log("\nNon è stato trovato nessun elemento");
+            console.log("\n!! Nessuna corrispondenza trovata !!");
         }
     }    
-
     /**
-     * @param {String} ElementoDaCercare nome del prodotto o della categoria da cercare
-     * @description - * Cerca un elemento specifico all'interno di una mappa (map) che rappresenta una struttura di dati. 
+     * @description - Cerca un elemento specifico all'interno di una mappa (map) che rappresenta una struttura di dati. 
      *  L'elemento può essere cercato sia come categoria che come prodotto all'interno di tale struttura.
      *  Se non è una categoria, cerca l'elemento tra i prodotti di tutte le categorie;
-     *  Se trova qualcosa allora restituisce un array con ciò che ha trovato:
-     *  Se trova una categoria restituisce un array contenente la categoria trovata.
-     *  Se trova un prodotto allora restituisce un array di 3 elementi con rispettivamente 
-     *  categoria, nome e quantità del prodotto trovato.
-     *  Se non trova niente invece restituisce un array vuoto.
-     */
-    Cerca(ElementoDaCercare){
+     * @param {String} elementoDaCercare nome del prodotto o della categoria da cercare
+     * @returns {Array} vetore contenente la categoria, il prodotto e la quantità cercati se trova un prodotto, altrimenti un array vuoto.
+     * Se l'elemento cercato è una categoria, restituisce un array con la categoria cercata.
+     * Se l'elemento cercato non è presente nella lista della spesa, restituisce un array vuoto.
+    */
+    Cerca(elementoDaCercare){
         let vettore;
-        ElementoDaCercare=ElementoDaCercare.toUpperCase();
-        if(this.Lista.has(ElementoDaCercare)){
-            vettore=new Array(ElementoDaCercare);            
+        elementoDaCercare=elementoDaCercare.toUpperCase();//tutte le categorie sono in maiuscolo
+        if(this.lista.has(elementoDaCercare)){
+            vettore=new Array(elementoDaCercare);            
             return vettore;                    
         }else{
-            ElementoDaCercare=ElementoDaCercare.toLowerCase();
+            elementoDaCercare=elementoDaCercare.toLowerCase();//tutti i prodotti sono in minuscolo
             vettore=new Array();
-            this.Lista.forEach((prodotti,categoria)=>{
-                if(prodotti.has(ElementoDaCercare)){                    
-                    vettore=new Array(categoria,ElementoDaCercare,prodotti.get(ElementoDaCercare));
+            this.lista.forEach((prodotti,categoria)=>{
+                if(prodotti.has(elementoDaCercare)){                    
+                    vettore=new Array(categoria,elementoDaCercare,prodotti.get(elementoDaCercare));
                     return vettore;
             }});
             return vettore;
@@ -210,44 +263,56 @@ class ListaDellaSpesa{
     }
     /**
      * @description la funzione permette all'utente di cercare un prodotto o una categoria all'interno della lista della spesa.
-     * Se trova l'elemento lo stampa a video e restituiesce true, altrimenti stampa un messaggio di errore e restituisce false.
+     * Se la lista è vuota mostra un messaggio di avviso.
+     * Altrimenti si chiede di inserire il prodotto o la categoria da cercare.
+     * Attraverso le funzini Cerca e Stampa viene poi stampato l'elemento cercato. 
      */
     InterfacciaCerca()
     {
-        console.log("Ricerca prodotto o categoria dalla lista della spesa\n");
-        let prodotto=prompt("Inserisci prodotto o categoria di prodotti da cercare nella lista: ");
-        let ElementoTrovato=this.Cerca(prodotto);
-        this.Stampa(ElementoTrovato);
+        console.log("------------------------------------");
+        console.log("    Ricerca prodotto o categoria    ");
+        console.log("------------------------------------\n");
+        if(this.lista.size==0){
+            console.log("!! la lista è vuota !!");
+            prompt("\nPremi Invio per continuare");
+            return; 
+        }        
+        let prodotto=prompt("Inserisci prodotto o categoria da cercare nella lista oppure immetti 0 per annullare >> ");
+        if(prodotto === "0"){
+            return;
+        }
+        let elementoTrovato=this.Cerca(prodotto);//ottengo l'elemento da stampare che può essere una categoria o un prodotto
+        this.Stampa(elementoTrovato);//facendo la stampa dell'elemento trovato attraverso la funzione Stampa
         prompt("\nPremi Invio per continuare");
     }
     
+
     /**
-     * @param {String} elemento - Il nome dell'elemento (categoria o prodotto) da eliminare.
-     * @returns {Boolean} True se ha eliminato un elemento, False se non ha eliminato nulla
      * @description Questo metodo rimuove una categoria o un prodotto dalla lista della spesa.
      * Ricerca per primo una categoria che ha lo stesso nome di "elemento".
      * Se trova una categoria col nome indicato la elimina.
      * Se non c'è nessuna categoria il cui nome corrisponde a "elemento", passa alla ricerca dei prodotti scorrendo tutte le categorie presenti.
      * Se in una categoria trova un prodotto il cui nome corrisponde a "elemento", lo elimina.
-     * Se la funzione non riesce ad eliminare nessun prodotto/categoria stampa un messaggio di avviso all'utente.
+     * @param {String} elemento - Il nome dell'elemento (categoria o prodotto) da eliminare.
+     * @returns {Boolean} True se ha eliminato un elemento, False se non ha eliminato nulla     * 
     */
     Elimina(elemento){
         let eliminato=0;
-        elemento=elemento.toUpperCase();
-        if(this.Lista.has(elemento)){
-            this.Lista.delete(elemento)
+        elemento=elemento.toUpperCase();//tutte le categorie sono in maiuscolo
+        if(this.lista.has(elemento)){
+            this.lista.delete(elemento)
             eliminato = 1
         }
         else{
-            elemento=elemento.toLowerCase();
-            this.Lista.forEach((prodotti,categoria)=>{
+            elemento=elemento.toLowerCase();//tutti i prodotti sono in minuscolo
+            this.lista.forEach((prodotti,categoria)=>{
                 if(prodotti.has(elemento))
                 {
                     prodotti.delete(elemento)
                     eliminato = 1
                 }
                 if(prodotti.size==0){//se la categoria rimane vuota allora l'elemento all'interno viene eliminato
-                    this.Lista.delete(categoria);
+                    this.lista.delete(categoria);
                     eliminato = 1
                 }
             })
@@ -259,80 +324,101 @@ class ListaDellaSpesa{
             return false;
         }       
     }
-
     /**
      * @description Questo metodo mostra l' interfaccia di Eliminazione.
      * La funzione verifica se la lista non e' vuota, in tal caso 
      * richiede all' utente di inserire il nome del prodotto o della categoria da eliminare.
+     * qualora durante l'input l'utente inserisca 0, la funzione termina.
+     * Vengono visualizzati vari messaggi a seconda del return ottenuto dalla funzione Elimina.
      */  
-    InterfacciaElimina(){
-        if(this.Lista.size==0){
-            console.log("\nLa lista della spesa è vuota");
+    InterfacciaElimina(){        
+        console.log("------------------------------------");
+        console.log("            Eliminazione            ");
+        console.log("------------------------------------\n");
+        if(this.lista.size==0){
+            console.log("!! la lista è vuota !!");
             prompt("\nPremi Invio per continuare");
             return; 
         }
         else{
-            console.log("Eliminazione prodotto o categoria dalla lista della spesa\n");
-            let prodotto=prompt("Inserisci prodotto o categoria da eliminare dalla lista: ");
-        
+            let prodotto=prompt("Inserisci prodotto o categoria da eliminare dalla lista oppure immetti 0 per annullare >> ");
+            if(prodotto === "0"){
+                return;
+            }
             if(this.Elimina(prodotto)){
                 console.log("\nElemento eliminato con successo");
-                this.GestioneFile.ScriviMapSuFile(this.Lista);
+                this.gestioneFile.ScriviMapSuFile(this.lista);
             }
             else{
-                console.log("\nImpossibile trovare una categoria o un prodotto con il nome specificato");
+                console.log("\n!! Impossibile trovare una categoria o un prodotto con il nome specificato !!");
             }
             prompt("\nPremi Invio per continuare");
         }
       
     }
 
+
     /** 
+     * @description Questo metodo modifica un prodotto presente nella lista della spesa. 
+    * Esso elimina il prodotto presente e poi aggiunge un nuovo prodotto con le informazioni specificate.
     * @param {String} vecchioProdotto - Il nome del prodotto esistente da sostituire.
     * @param {String} nuovoProdotto - Il nome del nuovo prodotto da aggiungere.
     * @param {Number} nuovaQuantita - La nuova quantità del prodotto.
     * @param {String} nuovaCategoria - La nuova categoria del prodotto.
-    * @returns {Boolean} True se il prodotto è stato modificato con successo, False altrimenti.
-    * @description Questo metodo modifica un prodotto presente nella lista della spesa. 
-    * Esso elimina il prodotto presente e poi aggiunge un nuovo prodotto con le informazioni specificate.
+    * @returns {Boolean} True se il prodotto è stato modificato con successo, False altrimenti.    * 
     */  
-    Modifica(vecchioProdotto, nuovoProdotto, nuovaQuantita, nuovaCategoria) {
-        if (this.Aggiungi(nuovoProdotto, nuovaQuantita, nuovaCategoria)) {
+    Modifica(vecchioProdotto, nuovaCategoria, nuovoProdotto, nuovaQuantita) {
+        if (this.Aggiungi(nuovaCategoria, nuovoProdotto, nuovaQuantita)) {
             return this.Elimina(vecchioProdotto);
         } else {
             return false;
         }
     }
-      
     /**
-    *  @description Interfaccia per modificare un prodotto nella lista della spesa.
+    * @description Interfaccia per modificare un prodotto nella lista della spesa.
     * Questo metodo chiede all'utente di inserire il nome del prodotto da modificare e 
     * poi gli chiede di selezionare cosa modificare (nome, quantità, categoria o uscire).
 
     * Se l'utente sceglie di modificare il nome, la quantità o la categoria del prodotto,
     * il metodo chiede all'utente di inserire i nuovi valori e poi li utilizza per modificare il prodotto nella lista della spesa.
-
+    
     * Se l'utente sceglie di uscire, il metodo termina l'operazione di modifica.
-    *  Se la modifica è avvenuta con successo, il metodo stampa un messaggio di conferma. Altrimenti, stampa un messaggio di errore.
+    * Se la modifica è avvenuta con successo, il metodo stampa un messaggio di conferma.
+    * Altrimenti, stampa un messaggio di avviso se non ci sono state modifiche o stampa 
+    * un messaggio di errore qualora la modifica non è riuscita.
+    * qualora durante l'input l'utente inserisca 0, la funzione termina.
     */
     InterfacciaModifica() {
-        console.log("Modifica prodotto nella lista della spesa\n");
-        let vecchioProdotto = prompt("Quale prodotto vuoi modificare? >> ");
+        console.log("------------------------------------");
+        console.log("              Modifica              ");
+        console.log("------------------------------------\n");
+        if(this.lista.size==0){
+            console.log("!! la lista è vuota !!");
+            prompt("\nPremi Invio per continuare");
+            return; 
+        }
+        let vecchioProdotto = prompt("Inserisci il prodotto da modificare oppure immetti 0 per annullare >> ");
+        if(vecchioProdotto === "0"){
+            return;
+        }
         let scelta;
-        let ElementoDaModificare = this.Cerca(vecchioProdotto);
-        if (ElementoDaModificare.length === 3) {
-            let nuovaCategoria = ElementoDaModificare[0];
-            let nuovoProdotto = ElementoDaModificare[1];
-            let nuovaQuantita = ElementoDaModificare[2];
+        let elementoDaModificare = this.Cerca(vecchioProdotto);
+        if (elementoDaModificare.length === 3) {//lunghezza 3 significa che è stato trovato un prodotto
+            //salviamo i valori del prodotto prima di essere modificato
+            let nuovaCategoria = elementoDaModificare[0];
+            let nuovoProdotto = elementoDaModificare[1];
+            let nuovaQuantita = elementoDaModificare[2];
             let modificato = false;           
             do {
                 console.clear();
-                console.log("Modifica prodotto nella lista della spesa\n");
+                console.log("------------------------------------");
+                console.log("              Modifica              ");
+                console.log("------------------------------------\n");
                 console.log("Cosa vuoi modificare del prodotto?\n");
                 console.log("1- Nome Prodotto");
                 console.log("2- Quantita");
                 console.log("3- Categoria");
-                console.log("4- Esci");
+                console.log("0- Esci");
                 scelta = parseInt(prompt(("Fai una scelta >> ")));
                 switch (scelta) {
                     case 1: {
@@ -350,7 +436,7 @@ class ListaDellaSpesa{
                         modificato = true;
                         break;
                     }
-                    case 4: {
+                    case 0: {
                         break;
                     }
                     default: {
@@ -359,11 +445,12 @@ class ListaDellaSpesa{
                         break;
                     }
                 }
-            } while (scelta != 4);
+            } while (scelta != 0);
           
-            if (modificato && this.Modifica(vecchioProdotto, nuovoProdotto, nuovaQuantita, nuovaCategoria)) {
+            //Controlli per controllare la validità dei dati inseriti e l'effettiva modifica del prodotto
+            if (modificato && this.Modifica(vecchioProdotto, nuovaCategoria, nuovoProdotto, nuovaQuantita)) {
                 console.log("\nModifica Avvenuta con Successo.");
-                this.GestioneFile.ScriviMapSuFile(this.Lista);
+                this.gestioneFile.ScriviMapSuFile(this.lista);
             } else if (!modificato) {
                 console.log("\nNessuna modifica effettuata.");
             } else {
@@ -374,65 +461,70 @@ class ListaDellaSpesa{
         }
         prompt("\nPremi Invio per continuare");
     }
-
 }
+
+
 /**
  * @function main
  * @description Questa funzione avvia il programma per la gestione della lista della spesa. 
    Visualizza un menu interattivo che consente all'utente di:
-   - Aggiungere un elemento alla lista della spesa specificando il prodotto, la quantità e la categoria.
-   - Visualizzare l'intera lista della spesa con i relativi prodotti e quantità per categoria.
-   - Rimuovere un elemento dalla lista della spesa specificando il prodotto o la categoria da eliminare.
-   - Uscire dal programma.
-   L'utente può scegliere un'opzione digitando un numero da 1 a 4. 
-   In caso di scelta non valida, viene visualizzato un messaggio di errore.
+   - Visualizzare la lista della spesa
+    - Ricerca un elemento nella lista della spesa
+    - Aggiungere un elemento alla lista della spesa
+    - Rimuovere un elemento dalla lista della spesa
+    - Modificare un elemento nella lista della spesa
+    - Uscire dal programma
+    Qualora l'utente inserisca un'opzione non valida, viene visualizzato un messaggio di errore.
  */
 function main(){
-    const Lista=new ListaDellaSpesa();
+    const lista=new ListaDellaSpesa();
     let scelta;
     do{
         console.clear();
-        console.log("Scegliere cosa fare (1-5)");
-        console.log("1-Aggiungere elemento alla lista della spesa");
-        console.log("2-Visualizzare la lista della spesa");
-        console.log("3-Rimuovere un elemento dalla lista della spesa");
-        console.log("4-Ricerca un elemento nella lista della spesa");
-        console.log("5-Modifica un elemento nella lista della spesa");
-        console.log("6-Esci");
-        scelta=parseInt(prompt(">> "));  
+        console.log("------------------------------------");
+        console.log("     Gestione Lista della Spesa     ");
+        console.log("------------------------------------\n");
+        console.log("Scegliere cosa fare");        
+        console.log("1-Visualizzare la lista della spesa");
+        console.log("2-Ricerca un elemento nella lista della spesa");
+        console.log("3-Aggiungere elemento alla lista della spesa");        
+        console.log("4-Rimuovere un elemento dalla lista della spesa");        
+        console.log("5-Modifica un elemento nella lista della spesa");     
+        console.log("0-Esci");   
+        scelta=parseInt(prompt(">> "));          
         console.clear(); 
-        switch(scelta){            
-            case 1:{                
-                Lista.InterfacciaAggiungi(); 
+        switch(scelta){                     
+            case 1:{  
+                lista.InterfacciaVisualizzaLista();              
                 break;
             }
             case 2:{
-                Lista.InterfacciaVisualizzaLista();
+                lista.InterfacciaCerca();
                 break;
             }
             case 3:{
-                Lista.InterfacciaElimina();
+                lista.InterfacciaAggiungi(); 
                 break;
             }
             case 4:{
-                Lista.InterfacciaCerca();
+                lista.InterfacciaElimina();
                 break;
-            }
+            }            
             case 5:{
-                Lista.InterfacciaModifica();
+                lista.InterfacciaModifica();
                 break;
-            }
-            case 6:{
+            }  
+            case 0:{
                 break;
-            }
+            }             
             default:{
-                console.log("Opzione non valida");
+                console.log("!! Opzione non valida !!");
                 prompt("\nPremi Invio per continuare");
                 break;
             }
         }
-    }while(scelta!==6);
+    }while(scelta!==0);
 
 }
 //Richiamo del main
-main();
+main()
