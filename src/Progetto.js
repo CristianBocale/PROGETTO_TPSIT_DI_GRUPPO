@@ -121,20 +121,20 @@ class ListaDellaSpesa{
      * @returns {Boolean} True se l'aggiunta è avvenuta con successo, False altrimenti.
      */
     Aggiungi(categoria, prodotto, quantita) {
-        quantita = parseFloat(quantita);
+        let quantitaSplit = quantita.split(" ");
+        let numero = parseFloat(quantitaSplit[0]);
 
-        // Validazione input
-        if (
-            !prodotto || 
-            prodotto.trim() === "" || 
-            quantita <= 0 || 
-            isNaN(quantita)  ||
-            !categoria ||
-            categoria.trim() === "" ||
-            prodotto.trim() === categoria.trim()
-        ) {
-            return false;
-        }
+    if (
+        !prodotto ||
+        prodotto.trim() === "" ||
+        isNaN(numero) || // Controlla solo il numero estratto
+        numero <= 0 ||
+        !categoria ||
+        categoria.trim() === "" ||
+        prodotto.trim() === categoria.trim()
+    ) {
+        return false;
+    }
 
         categoria = categoria.toUpperCase();
         prodotto = prodotto.toLowerCase();
@@ -163,7 +163,7 @@ class ListaDellaSpesa{
         console.log("------------------------------------");
         console.log("              Aggiunta              ");
         console.log("------------------------------------\n");
-        let categoria = prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc) oppure immetti 0 per annullare >>");
+        let categoria = prompt("Inserisci categoria prodotto (Es cibo,bevande,ecc) oppure immetti 0 per annullare >> ");
         if(categoria === "0"){//se l'utente inserisce 0 allora la funzione termina
             return;
         }
@@ -171,7 +171,7 @@ class ListaDellaSpesa{
         if(prodotto === "0"){//se l'utente inserisce 0 allora la funzione termina
             return;
         }
-        let quantita = prompt("Inserisci quantità da acquistare oppure immetti 0 per annullare >>");
+        let quantita = prompt("Inserisci quantità da acquistare (\"quantita\" \"eventuale unita di misura\") oppure immetti 0 per annullare >>");
         if(quantita === "0"){//se l'utente inserisce 0 allora la funzione termina
             return;
         }        
@@ -216,7 +216,7 @@ class ListaDellaSpesa{
     }
 
 
-    /**     * 
+    /**      
      * @description Questo metodo stampa un elemento specifico della lista della spesa.
      * questo elemento può essere una categoria o un prodotto.
      * Nel caso di una categoria, stampa tutti i prodotti e le relative quantità di quella categoria.
@@ -422,17 +422,17 @@ class ListaDellaSpesa{
                 scelta = parseInt(prompt(("Fai una scelta >> ")));
                 switch (scelta) {
                     case 1: {
-                        nuovaCategoria = prompt("Inserire la nuova categoria del prodotto >>");
+                        nuovaCategoria = prompt("Inserire la nuova categoria del prodotto >> ");
                         modificato = true;
                         break;
                     }
                     case 2: {
-                        nuovoProdotto = prompt("Inserire il nuovo nome del prodotto >>");
+                        nuovoProdotto = prompt("Inserire il nuovo nome del prodotto >> ");
                         modificato = true;
                         break;
                     }
                     case 3: {
-                        nuovaQuantita = prompt("Inserire la nuova Quantita' del prodotto >>");
+                        nuovaQuantita = prompt("Inserire la nuova Quantita' del prodotto >> ");
                         modificato = true;
                         break;
                     }                    
@@ -486,8 +486,8 @@ function main(){
         console.log("------------------------------------\n");
         console.log("Scegliere cosa fare");        
         console.log("1 - Visualizzare la lista della spesa");
-        console.log("2 - Ricerca un elemento nella lista della spesa");
-        console.log("3 - Aggiungere elemento alla lista della spesa");        
+        console.log("2 - Aggiungere elemento alla lista della spesa");   
+        console.log("3 - Ricerca un elemento nella lista della spesa");             
         console.log("4 - Rimuovere un elemento dalla lista della spesa");        
         console.log("5 - Modifica un elemento nella lista della spesa");     
         console.log("0 - Esci");   
@@ -499,11 +499,11 @@ function main(){
                 break;
             }
             case 2:{
-                lista.InterfacciaCerca();
+                lista.InterfacciaAggiungi(); 
                 break;
             }
             case 3:{
-                lista.InterfacciaAggiungi(); 
+                lista.InterfacciaCerca();
                 break;
             }
             case 4:{

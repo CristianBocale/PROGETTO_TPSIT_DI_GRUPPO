@@ -1,5 +1,8 @@
 {
   "CIBO": {
-    "pane": 3
+    "pane": "2 kg"
+  },
+  "PANE": {
+    "napas": "2"
   }
 }
