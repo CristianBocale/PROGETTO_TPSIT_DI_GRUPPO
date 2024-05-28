@@ -368,8 +368,8 @@ class ListaDellaSpesa{
     * @returns {Boolean} True se il prodotto è stato modificato con successo, False altrimenti.    * 
     */  
     Modifica(vecchioProdotto, nuovaCategoria, nuovoProdotto, nuovaQuantita) {
-        if (this.Aggiungi(nuovaCategoria, nuovoProdotto, nuovaQuantita)) {
-            return this.Elimina(vecchioProdotto);
+        if (this.Elimina(vecchioProdotto)) {
+            return this.Aggiungi(nuovaCategoria, nuovoProdotto, nuovaQuantita);
         } else {
             return false;
         }
@@ -415,27 +415,27 @@ class ListaDellaSpesa{
                 console.log("              Modifica              ");
                 console.log("------------------------------------\n");
                 console.log("Cosa vuoi modificare del prodotto?\n");
-                console.log("1- Nome Prodotto");
-                console.log("2- Quantita");
-                console.log("3- Categoria");
-                console.log("0- Esci");
+                console.log("1 - Categoria");
+                console.log("2 - Nome Prodotto");
+                console.log("3 - Quantita");                
+                console.log("0 - Esci");
                 scelta = parseInt(prompt(("Fai una scelta >> ")));
                 switch (scelta) {
                     case 1: {
-                        nuovoProdotto = prompt("Inserire il nuovo nome del prodotto >>");
-                        modificato = true;
-                        break;
-                    }
-                    case 2: {
-                        nuovaQuantita = prompt("Inserire la nuova Quantita' del prodotto >>");
-                        modificato = true;
-                        break;
-                    }
-                    case 3: {
                         nuovaCategoria = prompt("Inserire la nuova categoria del prodotto >>");
                         modificato = true;
                         break;
                     }
+                    case 2: {
+                        nuovoProdotto = prompt("Inserire il nuovo nome del prodotto >>");
+                        modificato = true;
+                        break;
+                    }
+                    case 3: {
+                        nuovaQuantita = prompt("Inserire la nuova Quantita' del prodotto >>");
+                        modificato = true;
+                        break;
+                    }                    
                     case 0: {
                         break;
                     }
@@ -485,12 +485,12 @@ function main(){
         console.log("     Gestione Lista della Spesa     ");
         console.log("------------------------------------\n");
         console.log("Scegliere cosa fare");        
-        console.log("1-Visualizzare la lista della spesa");
-        console.log("2-Ricerca un elemento nella lista della spesa");
-        console.log("3-Aggiungere elemento alla lista della spesa");        
-        console.log("4-Rimuovere un elemento dalla lista della spesa");        
-        console.log("5-Modifica un elemento nella lista della spesa");     
-        console.log("0-Esci");   
+        console.log("1 - Visualizzare la lista della spesa");
+        console.log("2 - Ricerca un elemento nella lista della spesa");
+        console.log("3 - Aggiungere elemento alla lista della spesa");        
+        console.log("4 - Rimuovere un elemento dalla lista della spesa");        
+        console.log("5 - Modifica un elemento nella lista della spesa");     
+        console.log("0 - Esci");   
         scelta=parseInt(prompt(">> "));          
         console.clear(); 
         switch(scelta){                     
